@@ -14,11 +14,10 @@ import com.zf.lottery.push.PushService;
 public class StatService {
 	private static final int THRESHOLD_MAX = 50;
 	private LotteryManager manager = LotteryManager.instance();
-	private PushService pushService = new PushService();
 
 	public void checkMax() {
 		List<MaxStat> stats = statMax();
-		pushService.push(stats);
+		PushService.push(stats);
 	}
 
 	private List<MaxStat> statMax() {

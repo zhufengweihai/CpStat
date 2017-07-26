@@ -23,7 +23,7 @@ public class PushService {
 	private static Logger logger = LoggerFactory.getLogger(PushService.class);
 	private static JPushClient jPushClient = new JPushClient(masterSecret, appKey);
 
-	public void push(List<MaxStat> maxStats) {
+	public static void push(List<MaxStat> maxStats) {
 		if (maxStats == null || maxStats.size() == 0) {
 			return;
 		}
@@ -36,7 +36,16 @@ public class PushService {
 		}
 	}
 
-	private String toString(List<MaxStat> maxStats) {
+	public static void pushError() {
+		PushPayload pushPayload = buildPushError();
+		try {
+			jPushClient.sendPush(pushPayload);
+		} catch (APIConnectionException | APIRequestException e) {
+			logger.error("Failed to push", e);
+		}
+	}
+
+	private static String toString(List<MaxStat> maxStats) {
 		StringBuilder sb = new StringBuilder();
 		for (MaxStat maxStat : maxStats) {
 			sb.append(maxStat.getType()).append(',');
@@ -47,10 +56,15 @@ public class PushService {
 		return sb.substring(0, sb.length() - 1);
 	}
 
-	private PushPayload buildPushObject(String content) {
+	private static PushPayload buildPushObject(String content) {
 		Map<String, String> extras = new HashMap<>(1);
 		extras.put(MaxStat.KEY_MAX_STAT, content);
 		return PushPayload.newBuilder().setPlatform(Platform.android())
 				.setNotification(Notification.android("通知", "通知", extras)).setAudience(Audience.all()).build();
+	}
+
+	private static PushPayload buildPushError() {
+		return PushPayload.newBuilder().setPlatform(Platform.android()).setNotification(Notification.alert("错误"))
+				.setAudience(Audience.all()).build();
 	}
 }

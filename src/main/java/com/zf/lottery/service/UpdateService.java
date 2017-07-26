@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import com.zf.lottery.dao.LotteryDao;
 import com.zf.lottery.dao.LotteryManager;
 import com.zf.lottery.data.Lottery;
+import com.zf.lottery.push.PushService;
 import com.zf.lottery.update.LotteryDataRequest;
 
 public class UpdateService {
@@ -53,7 +54,7 @@ public class UpdateService {
 		try {
 			List<Lottery> latestData = requestData();
 			statService.checkMax();
-			// lotteryDao.saveLatestData(latestData);
+			lotteryDao.saveLatestData(latestData);
 		} catch (Exception e) {
 			logger.error("update failed", e);
 		}
@@ -74,8 +75,12 @@ public class UpdateService {
 				manager.updateLastTwo(number);
 				manager.updateCombThree(number);
 				manager.updateCombTwo(number);
-
 			}
+		}
+
+		if (request.getCurrentCount() != manager.getCount()) {
+			PushService.pushError();
+			throw new Exception();
 		}
 		return latestData;
 	}
