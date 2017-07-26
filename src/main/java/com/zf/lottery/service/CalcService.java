@@ -158,9 +158,9 @@ public class CalcService {
 
 	public int[] calcLatestFirstThree(List<Lottery> lotteries) {
 		int[] firstThree = new int[Commons.THREE];
-		int size = lotteries.size();
+		int size = lotteries.size() - 1;
 		int count = 0;
-		for (int i = size - 1; i >= 0; i--) {
+		for (int i = size; i >= 0; i--) {
 			Lottery lottery = lotteries.get(i);
 			int ft = lottery.getNumber() / Commons.TWO;
 			if (firstThree[ft] == 0) {
@@ -175,9 +175,9 @@ public class CalcService {
 
 	public int[] calcLatestLastThree(List<Lottery> lotteries) {
 		int[] lastThree = new int[Commons.THREE];
-		int size = lotteries.size();
+		int size = lotteries.size() - 1;
 		int count = 0;
-		for (int i = size - 1; i >= 0; i--) {
+		for (int i = size; i >= 0; i--) {
 			Lottery lottery = lotteries.get(i);
 			int lt = lottery.getNumber() % Commons.THREE;
 			if (lastThree[lt] == 0) {
@@ -192,9 +192,9 @@ public class CalcService {
 
 	public int[] calcLatestFirstTwo(List<Lottery> lotteries) {
 		int[] firstTwo = new int[Commons.TWO];
-		int size = lotteries.size();
+		int size = lotteries.size() - 1;
 		int count = 0;
-		for (int i = size - 1; i >= 0; i--) {
+		for (int i = size; i >= 0; i--) {
 			Lottery lottery = lotteries.get(i);
 			int ft = lottery.getNumber() / Commons.THREE;
 			if (firstTwo[ft] == 0) {
@@ -209,9 +209,9 @@ public class CalcService {
 
 	public int[] calcLatestLastTwo(List<Lottery> lotteries) {
 		int[] lastTwo = new int[Commons.TWO];
-		int size = lotteries.size();
+		int size = lotteries.size() - 1;
 		int count = 0;
-		for (int i = size - 1; i >= 0; i--) {
+		for (int i = size; i >= 0; i--) {
 			Lottery lottery = lotteries.get(i);
 			int lt = lottery.getNumber() % Commons.TWO;
 			if (lastTwo[lt] == 0) {
@@ -226,8 +226,8 @@ public class CalcService {
 
 	public Map<Integer, Integer> calcLatestCombThree(List<Lottery> lotteries) {
 		Map<Integer, Integer> absenceMap = new HashMap<>();
-		int size = lotteries.size();
-		for (int i = size - 1; i >= 0; i--) {
+		int size = lotteries.size() - 1;
+		for (int i = size; i >= 0; i--) {
 			Lottery lottery = lotteries.get(i);
 			int ct = lottery.getNumber() % Commons.THREE;
 			Integer num = Utils.arrange3(ct);
@@ -241,9 +241,8 @@ public class CalcService {
 
 	public Map<Integer, Integer> calcLatestCombTwo(List<Lottery> lotteries) {
 		Map<Integer, Integer> absenceMap = new HashMap<>();
-		int size = lotteries.size();
-		int count = 0;
-		for (int i = size - 1; i >= 0; i--) {
+		int size = lotteries.size() - 1;
+		for (int i = size; i >= 0; i--) {
 			Lottery lottery = lotteries.get(i);
 			int ct = lottery.getNumber() % Commons.TWO;
 			Integer num = Utils.getComTowMin(ct);
