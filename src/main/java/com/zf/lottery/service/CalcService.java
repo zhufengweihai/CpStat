@@ -26,9 +26,11 @@ public class CalcService {
 		for (int i = 0; i < size; i++) {
 			Lottery lottery = lotteries.get(i);
 			int num = lottery.getNumber() % Commons.TWO;
-			ArrayList<Integer> arrayList = absencesMap.get(Utils.getComTowMin(num));
-			arrayList.add(i - lasts[num]);
-			lasts[num] = i;
+			int min = Utils.getComTowMin(num);
+			ArrayList<Integer> arrayList = absencesMap.get(min);
+			int absence = i - lasts[min];
+			arrayList.add(absence);
+			lasts[min] = i;
 		}
 
 		Map<Integer, Integer> absenceMap = new HashMap<>();
@@ -96,9 +98,10 @@ public class CalcService {
 		for (int i = 0; i < size; i++) {
 			Lottery lottery = lotteries.get(i);
 			int num = lottery.getNumber() % Commons.THREE;
-			ArrayList<Integer> arrayList = absencesMap.get(Utils.arrange3(num));
-			arrayList.add(i - lasts[num]);
-			lasts[num] = i;
+			Integer min = Utils.arrange3(num);
+			ArrayList<Integer> arrayList = absencesMap.get(min);
+			arrayList.add(i - lasts[min]);
+			lasts[min] = i;
 		}
 
 		Map<Integer, Integer> absenceMap = new HashMap<>();

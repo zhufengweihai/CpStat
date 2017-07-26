@@ -1,6 +1,7 @@
 package com.zf.lottery.service;
 
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -52,7 +53,7 @@ public class UpdateService {
 		try {
 			List<Lottery> latestData = requestData();
 			statService.checkMax();
-			//lotteryDao.saveLatestData(latestData);
+			// lotteryDao.saveLatestData(latestData);
 		} catch (Exception e) {
 			logger.error("update failed", e);
 		}
@@ -82,6 +83,13 @@ public class UpdateService {
 	public static void main(String[] args) throws ClassNotFoundException, SQLException {
 		UpdateService updateService = new UpdateService();
 		updateService.init();
+		LotteryManager manager = LotteryManager.instance();
+		System.out.println(Arrays.toString(manager.getFirstThree()));
+		System.out.println(Arrays.toString(manager.getLastThree()));
+		System.out.println(Arrays.toString(manager.getFirstTwo()));
+		System.out.println(Arrays.toString(manager.getLastTwo()));
+		System.out.println(manager.getCombThree());
+		System.out.println(manager.getCombTwo());
 
 	}
 }
