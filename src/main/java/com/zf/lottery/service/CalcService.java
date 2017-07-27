@@ -158,12 +158,15 @@ public class CalcService {
 
 	public int[] calcLatestFirstThree(List<Lottery> lotteries) {
 		int[] firstThree = new int[Commons.THREE];
+		for (int i = 0; i < firstThree.length; i++) {
+			firstThree[i] = -1;
+		}
 		int size = lotteries.size() - 1;
 		int count = 0;
 		for (int i = size; i >= 0; i--) {
 			Lottery lottery = lotteries.get(i);
 			int ft = lottery.getNumber() / Commons.TWO;
-			if (firstThree[ft] == 0) {
+			if (firstThree[ft] < 0) {
 				firstThree[ft] = size - i;
 				if (++count == Commons.THREE) {
 					return firstThree;
@@ -175,12 +178,15 @@ public class CalcService {
 
 	public int[] calcLatestLastThree(List<Lottery> lotteries) {
 		int[] lastThree = new int[Commons.THREE];
+		for (int i = 0; i < lastThree.length; i++) {
+			lastThree[i] = -1;
+		}
 		int size = lotteries.size() - 1;
 		int count = 0;
 		for (int i = size; i >= 0; i--) {
 			Lottery lottery = lotteries.get(i);
 			int lt = lottery.getNumber() % Commons.THREE;
-			if (lastThree[lt] == 0) {
+			if (lastThree[lt] < 0) {
 				lastThree[lt] = size - i;
 				if (++count == Commons.THREE) {
 					return lastThree;
@@ -192,12 +198,15 @@ public class CalcService {
 
 	public int[] calcLatestFirstTwo(List<Lottery> lotteries) {
 		int[] firstTwo = new int[Commons.TWO];
+		for (int i = 0; i < firstTwo.length; i++) {
+			firstTwo[i] = -1;
+		}
 		int size = lotteries.size() - 1;
 		int count = 0;
 		for (int i = size; i >= 0; i--) {
 			Lottery lottery = lotteries.get(i);
 			int ft = lottery.getNumber() / Commons.THREE;
-			if (firstTwo[ft] == 0) {
+			if (firstTwo[ft] < 0) {
 				firstTwo[ft] = size - i;
 				if (++count == Commons.TWO) {
 					return firstTwo;
@@ -209,12 +218,15 @@ public class CalcService {
 
 	public int[] calcLatestLastTwo(List<Lottery> lotteries) {
 		int[] lastTwo = new int[Commons.TWO];
+		for (int i = 0; i < lastTwo.length; i++) {
+			lastTwo[i] = -1;
+		}
 		int size = lotteries.size() - 1;
 		int count = 0;
 		for (int i = size; i >= 0; i--) {
 			Lottery lottery = lotteries.get(i);
 			int lt = lottery.getNumber() % Commons.TWO;
-			if (lastTwo[lt] == 0) {
+			if (lastTwo[lt] < 0) {
 				lastTwo[lt] = size - i;
 				if (++count == Commons.TWO) {
 					return lastTwo;
