@@ -2,6 +2,7 @@ package com.zf.lottery.service;
 
 import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -53,6 +54,23 @@ public class UpdateService {
 	public void update() {
 		try {
 			List<Lottery> latestData = requestData();
+			for (Lottery lottery : latestData) {
+				manager.increaseCount();
+				manager.setMaxTerm(lottery.getTerm());
+				int number = lottery.getNumber();
+				manager.updateFirstThree(number);
+				manager.updateLastThree(number);
+				manager.updateFirstTwo(number);
+				manager.updateLastTwo(number);
+				manager.updateCombThree(number);
+				manager.updateCombTwo(number);
+			}
+
+			if (manager.getRealCount() != manager.getCount()) {
+				PushService.pushError();
+				throw new Exception();
+			}
+
 			statService.checkMax();
 			lotteryDao.saveLatestData(latestData);
 		} catch (Exception e) {
@@ -64,23 +82,11 @@ public class UpdateService {
 		LotteryDataRequest request = new LotteryDataRequest();
 		List<Lottery> latestData = request.requestLastData();
 		int maxTerm = manager.getMaxTerm();
-		for (Lottery lottery : latestData) {
-			if (lottery.getTerm() > maxTerm) {
-				manager.increaseCount();
-				manager.setMaxTerm(lottery.getTerm());
-				int number = lottery.getNumber();
-				manager.updateFirstThree(number);
-				manager.updateLastThree(number);
-				manager.updateFirstTwo(number);
-				manager.updateLastTwo(number);
-				manager.updateCombThree(number);
-				manager.updateCombTwo(number);
+		for (Iterator<Lottery> it = latestData.iterator(); it.hasNext();) {
+			Lottery lottery = (Lottery) it.next();
+			if (lottery.getTerm() <= maxTerm) {
+				it.remove();
 			}
-		}
-
-		if (request.getCurrentCount() != manager.getCount()) {
-			PushService.pushError();
-			throw new Exception();
 		}
 		return latestData;
 	}
@@ -95,6 +101,5 @@ public class UpdateService {
 		System.out.println(Arrays.toString(manager.getLastTwo()));
 		System.out.println(manager.getCombThree());
 		System.out.println(manager.getCombTwo());
-
 	}
 }

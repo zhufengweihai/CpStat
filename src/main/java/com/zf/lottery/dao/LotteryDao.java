@@ -13,7 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.zf.lottery.common.Commons;
-import com.zf.lottery.common.Utils;
 import com.zf.lottery.data.Lottery;
 import com.zf.lottery.data.StarType;
 
@@ -59,19 +58,16 @@ public class LotteryDao {
 
 	public void saveLatestData(List<Lottery> latestData) throws SQLException {
 		Connection conn = DriverManager.getConnection(SQL_DB);
-		int term = LotteryManager.instance().getMaxTerm();
 		PreparedStatement stat = null;
 		try {
 			stat = conn.prepareStatement("insert into lottery values(?,?,?)");
-			int size = latestData.size() - 1;
-			for (int i = size; i >= 0; i--) {
+			int size = latestData.size();
+			for (int i = 0; i < size; i++) {
 				Lottery lottery = latestData.get(i);
-				if (lottery.getTerm() > term) {
-					stat.setInt(1, lottery.getTerm());
-					stat.setInt(2, lottery.getTime());
-					stat.setInt(3, lottery.getNumber());
-					stat.executeUpdate();
-				}
+				stat.setInt(1, lottery.getTerm());
+				stat.setInt(2, lottery.getTime());
+				stat.setInt(3, lottery.getNumber());
+				stat.executeUpdate();
 			}
 		} finally {
 			if (stat != null) {

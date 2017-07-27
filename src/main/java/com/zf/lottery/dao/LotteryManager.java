@@ -10,6 +10,7 @@ import com.zf.lottery.common.Utils;
 public class LotteryManager {
 	private static LotteryManager instance = new LotteryManager();
 	private int count = -1;
+	private int realCount = -1;
 	private int maxTerm = -1;
 	private int[] maxFirstThree = null;
 	private int[] maxLastThree = null;
@@ -46,6 +47,14 @@ public class LotteryManager {
 
 	public void setCount(int count) {
 		this.count = count;
+	}
+
+	public int getRealCount() {
+		return realCount;
+	}
+
+	public void setRealCount(int realCount) {
+		this.realCount = realCount;
 	}
 
 	public void increaseCount() {

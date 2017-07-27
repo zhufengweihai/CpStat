@@ -37,7 +37,7 @@ public class UpdateSericeListener implements ServletContextListener {
 		int second = now.get(Calendar.SECOND);
 		int time = (INTERVAL_NIGHT - minute % INTERVAL_NIGHT + 2) * 60 - second;
 
-		service.scheduleAtFixedRate(createJob(), 0, INTERVAL_NIGHT * 60, TimeUnit.SECONDS);
+		service.scheduleAtFixedRate(createJob(), time, INTERVAL_NIGHT * 60, TimeUnit.SECONDS);
 	}
 
 	private Runnable createJob() {
@@ -64,6 +64,6 @@ public class UpdateSericeListener implements ServletContextListener {
 		} else if (hour >= DAY_HOUR_END || hour < NIGHT_HOUR_END) {
 			return true;
 		}
-		return true;
+		return false;
 	}
 }

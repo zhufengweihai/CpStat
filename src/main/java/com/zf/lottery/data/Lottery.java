@@ -1,5 +1,7 @@
 package com.zf.lottery.data;
 
+import java.util.Arrays;
+
 public class Lottery {
 	private int term = -1;
 	private int time = -1;
@@ -38,4 +40,9 @@ public class Lottery {
 		this.absences = absences;
 	}
 
+	@Override
+	public String toString() {
+		return "Lottery [term=" + term + ", time=" + time + ", number=" + number + ", absences="
+				+ Arrays.toString(absences) + "]";
+	}
 }
