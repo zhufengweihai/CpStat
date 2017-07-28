@@ -3,8 +3,9 @@ package com.zf.lottery.index;
 public class FanWeiJiHeWei implements IndexStrategy {
 
 	@Override
-	public int calcIndex(int... numbers) {
-		return (numbers[0] * (4 - 1) + numbers[1] * (4 - 2) + numbers[2] * (4 - 3)) % 10;
+	public int calcIndex(int number) {
+		int[] array = toArray(number);
+		return (array[0] * (4 - 1) + array[1] * (4 - 2) + array[2] * (4 - 3)) % 10;
 	}
 
 }

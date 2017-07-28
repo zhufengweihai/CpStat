@@ -3,11 +3,12 @@ package com.zf.lottery.index;
 public class MinValue implements IndexStrategy {
 
 	@Override
-	public int calcIndex(int... numbers) {
-		int minValue = numbers[0];
-		for (int i = 0; i < numbers.length; i++) {
-			if (numbers[i] < minValue)
-				minValue = numbers[i];
+	public int calcIndex(int number) {
+		int[] array = toArray(number);
+		int minValue = array[0];
+		for (int i = 0; i < array.length; i++) {
+			if (array[i] < minValue)
+				minValue = array[i];
 		}
 		return minValue;
 	}

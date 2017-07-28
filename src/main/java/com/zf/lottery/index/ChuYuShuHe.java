@@ -9,9 +9,10 @@ public class ChuYuShuHe implements IndexStrategy {
 	}
 
 	@Override
-	public int calcIndex(int... numbers) {
+	public int calcIndex(int number) {
 		int sum = 0;
-		for (int n : numbers) {
+		int[] array = toArray(number);
+		for (int n : array) {
 			sum += n % divisor;
 		}
 		return sum;

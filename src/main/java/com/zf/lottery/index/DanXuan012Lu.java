@@ -9,11 +9,9 @@ public class DanXuan012Lu implements IndexStrategy {
 	}
 
 	@Override
-	public int calcIndex(int... numbers) {
+	public int calcIndex(int number) {
 		int sum = 0;
-		for (int n : numbers) {
-			sum += n % divisor;
-		}
+		
 		return sum;
 	}
 
