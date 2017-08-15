@@ -12,7 +12,8 @@ import com.zf.lottery.data.StarType;
 import com.zf.lottery.push.PushService;
 
 public class StatService {
-	private static final int THRESHOLD_MAX = 50;
+	private static final int THRESHOLD_MAX = 100;
+	private static final int THRESHOLD_THREE = 8000;
 	private LotteryManager manager = LotteryManager.instance();
 
 	public void checkMax() {
@@ -25,7 +26,7 @@ public class StatService {
 		int[] firstThree = manager.getFirstThree();
 		int[] maxFirstThree = manager.getMaxFirstThree();
 		for (int i = 0; i < maxFirstThree.length; i++) {
-			if (maxFirstThree[i] - firstThree[i] <= THRESHOLD_MAX) {
+			if (maxFirstThree[i] - firstThree[i] <= THRESHOLD_MAX && firstThree[i] >= THRESHOLD_THREE) {
 				stats.add(new MaxStat(StarType.FirstThree.ordinal(), i, firstThree[i], maxFirstThree[i]));
 			}
 		}
@@ -33,7 +34,7 @@ public class StatService {
 		int[] lastThree = manager.getLastThree();
 		int[] maxLastThree = manager.getMaxLastThree();
 		for (int i = 0; i < maxLastThree.length; i++) {
-			if (maxLastThree[i] - lastThree[i] <= THRESHOLD_MAX) {
+			if (maxLastThree[i] - lastThree[i] <= THRESHOLD_MAX && lastThree[i] >= THRESHOLD_THREE) {
 				stats.add(new MaxStat(StarType.LastThree.ordinal(), i, lastThree[i], maxLastThree[i]));
 			}
 		}
