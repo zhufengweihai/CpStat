@@ -29,18 +29,19 @@ public class UpdateService {
 			manager.setCount(lotteries.size());
 
 			CalcService calcService = new CalcService();
-			manager.setMaxFirstThree(calcService.calcMaxFirstThree(lotteries));
-			manager.setMaxLastThree(calcService.calcMaxLastThree(lotteries));
+			// manager.setMaxFirstThree(calcService.calcMaxFirstThree(lotteries));
+			// manager.setMaxLastThree(calcService.calcMaxLastThree(lotteries));
 			manager.setMaxFirstTwo(calcService.calcMaxFirstTwo(lotteries));
 			manager.setMaxLastTwo(calcService.calcMaxLastTwo(lotteries));
-			manager.setMaxCombThree(calcService.calcMaxCombThree(lotteries));
+			// manager.setMaxCombThree(calcService.calcMaxCombThree(lotteries));
 			manager.setMaxCombTwo(calcService.calcMaxCombTwo(lotteries));
 
 			manager.setFirstThree(calcService.calcLatestFirstThree(lotteries));
 			manager.setLastThree(calcService.calcLatestLastThree(lotteries));
 			manager.setFirstTwo(calcService.calcLatestFirstTwo(lotteries));
 			manager.setLastTwo(calcService.calcLatestLastTwo(lotteries));
-			manager.setCombThree(calcService.calcLatestCombThree(lotteries));
+			manager.setGroupSix(calcService.calcLatestGroupSix(lotteries));
+			manager.setGroupThree(calcService.calcLatestGroupThree(lotteries));
 			manager.setCombTwo(calcService.calcLatestCombTwo(lotteries));
 		} catch (Exception e) {
 			logger.error("UpdateService init failed", e);
@@ -62,7 +63,8 @@ public class UpdateService {
 				manager.updateLastThree(number);
 				manager.updateFirstTwo(number);
 				manager.updateLastTwo(number);
-				manager.updateCombThree(number);
+				manager.updateGroupSix(number);
+				manager.updateGroupThree(number);
 				manager.updateCombTwo(number);
 			}
 
@@ -99,7 +101,7 @@ public class UpdateService {
 		System.out.println(Arrays.toString(manager.getLastThree()));
 		System.out.println(Arrays.toString(manager.getFirstTwo()));
 		System.out.println(Arrays.toString(manager.getLastTwo()));
-		System.out.println(manager.getCombThree());
+		System.out.println(manager.getGroupSix());
 		System.out.println(manager.getCombTwo());
 	}
 }

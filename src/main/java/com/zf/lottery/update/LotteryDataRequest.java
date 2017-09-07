@@ -60,7 +60,7 @@ public class LotteryDataRequest {
 		lottery.setTime((int) ((date.getTime() - Commons.TIME_SART) / BASE_TIME));
 		String numStrings = StringUtils.substringBetween(resultHtml, "<span>", "</div>");
 		numStrings = pattern.matcher(numStrings).replaceAll("").trim();
-		lottery.setNumbers(Integer.parseInt(numStrings));
+		lottery.setNumber(Integer.parseInt(numStrings));
 		return lottery;
 	}
 }

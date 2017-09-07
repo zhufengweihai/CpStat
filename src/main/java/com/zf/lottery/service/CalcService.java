@@ -17,8 +17,10 @@ public class CalcService {
 	public Map<Integer, Integer> calcMaxCombTwo(List<Lottery> lotteries) {
 		Map<Integer, ArrayList<Integer>> absencesMap = new HashMap<>();
 		for (int i = 0; i < 10; i++) {
-			for (int j = i; j < 10; j++) {
-				absencesMap.put(i * 10 + j, new ArrayList<>());
+			for (int k = i; k < 10; k++) {
+				if (k != i) {
+					absencesMap.put(i * 10 + k, new ArrayList<>());
+				}
 			}
 		}
 		int[] lasts = new int[Commons.TWO];
@@ -26,7 +28,7 @@ public class CalcService {
 		for (int i = 0; i < size; i++) {
 			Lottery lottery = lotteries.get(i);
 			int num = lottery.getNumber() % Commons.TWO;
-			int min = Utils.getComTowMin(num);
+			int min = Utils.getCombTwoMin(num);
 			ArrayList<Integer> arrayList = absencesMap.get(min);
 			int absence = i - lasts[min];
 			arrayList.add(absence);
@@ -82,78 +84,6 @@ public class CalcService {
 			maxFirstTwo[i] = Collections.max(absences[i]);
 		}
 		return maxFirstTwo;
-	}
-
-	public Map<Integer, Integer> calcMaxCombThree(List<Lottery> lotteries) {
-		Map<Integer, ArrayList<Integer>> absencesMap = new HashMap<>();
-		for (int i = 0; i < 10; i++) {
-			for (int j = i; j < 10; j++) {
-				for (int k = j; k < 10; k++) {
-					absencesMap.put(i * 100 + j * 10 + k, new ArrayList<>());
-				}
-			}
-		}
-		int[] lasts = new int[Commons.THREE];
-		int size = lotteries.size();
-		for (int i = 0; i < size; i++) {
-			Lottery lottery = lotteries.get(i);
-			int num = lottery.getNumber() % Commons.THREE;
-			Integer min = Utils.arrange3(num);
-			ArrayList<Integer> arrayList = absencesMap.get(min);
-			arrayList.add(i - lasts[min]);
-			lasts[min] = i;
-		}
-
-		Map<Integer, Integer> absenceMap = new HashMap<>();
-		Set<Entry<Integer, ArrayList<Integer>>> entrySet = absencesMap.entrySet();
-		for (Entry<Integer, ArrayList<Integer>> entry : entrySet) {
-			absenceMap.put(entry.getKey(), Collections.max(entry.getValue()));
-		}
-		return absenceMap;
-	}
-
-	public int[] calcMaxFirstThree(List<Lottery> lotteries) {
-		ArrayList<Integer>[] absences = new ArrayList[Commons.THREE];
-		for (int i = 0; i < Commons.THREE; i++) {
-			absences[i] = new ArrayList<Integer>();
-		}
-		int[] lasts = new int[Commons.THREE];
-		int size = lotteries.size();
-		for (int i = 0; i < size; i++) {
-			Lottery lottery = lotteries.get(i);
-			int num = lottery.getNumber() / Commons.TWO;
-			absences[num].add(i - lasts[num]);
-			lasts[num] = i;
-		}
-
-		int[] maxFirstThree = new int[Commons.THREE];
-		for (int i = 0; i < absences.length; i++) {
-			maxFirstThree[i] = Collections.max(absences[i]);
-
-		}
-		return maxFirstThree;
-	}
-
-	public int[] calcMaxLastThree(List<Lottery> lotteries) {
-		ArrayList<Integer>[] absences = new ArrayList[Commons.THREE];
-		for (int i = 0; i < Commons.THREE; i++) {
-			absences[i] = new ArrayList<Integer>();
-		}
-		int[] lasts = new int[Commons.THREE];
-		int size = lotteries.size();
-		for (int i = 0; i < size; i++) {
-			Lottery lottery = lotteries.get(i);
-			int num = lottery.getNumber() % Commons.THREE;
-			absences[num].add(i - lasts[num]);
-			lasts[num] = i;
-		}
-
-		int[] maxLastThree = new int[Commons.THREE];
-		for (int i = 0; i < absences.length; i++) {
-			maxLastThree[i] = Collections.max(absences[i]);
-		}
-
-		return maxLastThree;
 	}
 
 	public int[] calcLatestFirstThree(List<Lottery> lotteries) {
@@ -236,16 +166,56 @@ public class CalcService {
 		return lastTwo;
 	}
 
-	public Map<Integer, Integer> calcLatestCombThree(List<Lottery> lotteries) {
+	public Map<Integer, Integer> calcLatestGroupSix(List<Lottery> lotteries) {
 		Map<Integer, Integer> absenceMap = new HashMap<>();
+		for (int i = 0; i < 10; i++) {
+			for (int j = i + 1; j < 10; j++) {
+				for (int k = j + 1; k < 10; k++) {
+					absenceMap.put(i * 100 + j * 10 + k, -1);
+				}
+			}
+		}
+		int count = 0;
 		int size = lotteries.size() - 1;
 		for (int i = size; i >= 0; i--) {
 			Lottery lottery = lotteries.get(i);
 			int ct = lottery.getNumber() % Commons.THREE;
-			Integer num = Utils.arrange3(ct);
-			boolean put = absenceMap.putIfAbsent(num, size - i) == null;
-			if (put && absenceMap.size() == Commons.COMB_THREE) {
-				return absenceMap;
+			int num = Utils.getCombThreeMin(ct);
+			Integer absence = absenceMap.get(num);
+			if (absence != null && absence < 0) {
+				absenceMap.put(num, size - i);
+				count++;
+				if (count == Commons.GROUP_SIX) {
+					return absenceMap;
+				}
+			}
+		}
+		return absenceMap;
+	}
+
+	public Map<Integer, Integer> calcLatestGroupThree(List<Lottery> lotteries) {
+		Map<Integer, Integer> absenceMap = new HashMap<>();
+		for (int i = 0; i < 10; i++) {
+			for (int k = 0; k < 10; k++) {
+				if (k != i) {
+					absenceMap.put(i * 100 + i * 10 + k, -1);
+				}
+			}
+		}
+
+		int count = 0;
+		int size = lotteries.size() - 1;
+		for (int i = size; i >= 0; i--) {
+			Lottery lottery = lotteries.get(i);
+			int ct = lottery.getNumber() % Commons.THREE;
+			int num = Utils.getCombThreeMin(ct);
+			Integer absence = absenceMap.get(num);
+			if (absence != null && absence < 0) {
+				absenceMap.put(num, size - i);
+				count++;
+				if (count == Commons.GROUP_THREE) {
+					return absenceMap;
+				}
 			}
 		}
 		return absenceMap;
@@ -253,14 +223,26 @@ public class CalcService {
 
 	public Map<Integer, Integer> calcLatestCombTwo(List<Lottery> lotteries) {
 		Map<Integer, Integer> absenceMap = new HashMap<>();
+		for (int i = 0; i < 10; i++) {
+			for (int k = i; k < 10; k++) {
+				if (k != i) {
+					absenceMap.put(i * 10 + k, -1);
+				}
+			}
+		}
+		int count = 0;
 		int size = lotteries.size() - 1;
 		for (int i = size; i >= 0; i--) {
 			Lottery lottery = lotteries.get(i);
 			int ct = lottery.getNumber() % Commons.TWO;
-			Integer num = Utils.getComTowMin(ct);
-			boolean put = absenceMap.putIfAbsent(num, size - i) == null;
-			if (put && absenceMap.size() == Commons.COMB_TWO) {
-				return absenceMap;
+			Integer num = Utils.getCombTwoMin(ct);
+			Integer absence = absenceMap.get(num);
+			if (absence != null && absence < 0) {
+				absenceMap.put(num, size - i);
+				count++;
+				if (count == Commons.COMB_TWO) {
+					return absenceMap;
+				}
 			}
 		}
 		return absenceMap;

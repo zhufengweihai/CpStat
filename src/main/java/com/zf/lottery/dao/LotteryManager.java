@@ -12,17 +12,16 @@ public class LotteryManager {
 	private int count = -1;
 	private int realCount = -1;
 	private int maxTerm = -1;
-	private int[] maxFirstThree = null;
-	private int[] maxLastThree = null;
+
 	private int[] maxFirstTwo = null;
 	private int[] maxLastTwo = null;
-	private Map<Integer, Integer> maxCombThree = null;
 	private Map<Integer, Integer> maxCombTwo = null;
 	private int[] firstThree = null;
 	private int[] lastThree = null;
 	private int[] firstTwo = null;
 	private int[] lastTwo = null;
-	private Map<Integer, Integer> combThree = null;
+	private Map<Integer, Integer> groupSix = null;
+	private Map<Integer, Integer> groupThree = null;
 	private Map<Integer, Integer> combTwo = null;
 
 	private LotteryManager() {
@@ -61,22 +60,6 @@ public class LotteryManager {
 		count++;
 	}
 
-	public int[] getMaxFirstThree() {
-		return maxFirstThree;
-	}
-
-	public void setMaxFirstThree(int[] maxFirstThree) {
-		this.maxFirstThree = maxFirstThree;
-	}
-
-	public int[] getMaxLastThree() {
-		return maxLastThree;
-	}
-
-	public void setMaxLastThree(int[] maxLastThree) {
-		this.maxLastThree = maxLastThree;
-	}
-
 	public int[] getMaxFirstTwo() {
 		return maxFirstTwo;
 	}
@@ -91,14 +74,6 @@ public class LotteryManager {
 
 	public void setMaxLastTwo(int[] maxLastTwo) {
 		this.maxLastTwo = maxLastTwo;
-	}
-
-	public Map<Integer, Integer> getMaxCombThree() {
-		return maxCombThree;
-	}
-
-	public void setMaxCombThree(Map<Integer, Integer> maxCombThree) {
-		this.maxCombThree = maxCombThree;
 	}
 
 	public Map<Integer, Integer> getMaxCombTwo() {
@@ -122,12 +97,6 @@ public class LotteryManager {
 			firstThree[i]++;
 		}
 		firstThree[number / Commons.TWO] = 0;
-
-		for (int i = 0; i < firstThree.length; i++) {
-			if (firstThree[i] >= maxFirstThree[i]) {
-				maxFirstThree[i] = firstThree[i];
-			}
-		}
 	}
 
 	public int[] getLastThree() {
@@ -143,12 +112,6 @@ public class LotteryManager {
 			lastThree[i]++;
 		}
 		lastThree[number % Commons.THREE] = 0;
-
-		for (int i = 0; i < lastThree.length; i++) {
-			if (lastThree[i] >= maxLastThree[i]) {
-				maxLastThree[i] = lastThree[i];
-			}
-		}
 	}
 
 	public int[] getFirstTwo() {
@@ -193,29 +156,38 @@ public class LotteryManager {
 		}
 	}
 
-	public Map<Integer, Integer> getCombThree() {
-		return combThree;
+	public Map<Integer, Integer> getGroupSix() {
+		return groupSix;
 	}
 
-	public void setCombThree(Map<Integer, Integer> combThree) {
-		this.combThree = combThree;
+	public void setGroupSix(Map<Integer, Integer> groupSix) {
+		this.groupSix = groupSix;
 	}
 
-	public void updateCombThree(int number) {
-		Set<Entry<Integer, Integer>> entrySet = combThree.entrySet();
+	public void updateGroupSix(int number) {
+		Set<Entry<Integer, Integer>> entrySet = groupSix.entrySet();
 		for (Entry<Integer, Integer> entry : entrySet) {
 			entry.setValue(entry.getValue() + 1);
 		}
 		Integer num = Utils.arrange3(number % Commons.THREE);
-		combThree.put(num, 0);
+		groupSix.replace(num, 0);
+	}
 
+	public Map<Integer, Integer> getGroupThree() {
+		return groupThree;
+	}
+
+	public void setGroupThree(Map<Integer, Integer> groupThree) {
+		this.groupThree = groupThree;
+	}
+
+	public void updateGroupThree(int number) {
+		Set<Entry<Integer, Integer>> entrySet = groupThree.entrySet();
 		for (Entry<Integer, Integer> entry : entrySet) {
-			Integer n = entry.getKey();
-			Integer absence = entry.getValue();
-			if (maxCombThree.get(n) <= absence) {
-				maxCombThree.put(n, absence);
-			}
+			entry.setValue(entry.getValue() + 1);
 		}
+		Integer num = Utils.arrange3(number % Commons.THREE);
+		groupThree.replace(num, 0);
 	}
 
 	public Map<Integer, Integer> getCombTwo() {
@@ -231,8 +203,8 @@ public class LotteryManager {
 		for (Entry<Integer, Integer> entry : entrySet) {
 			entry.setValue(entry.getValue() + 1);
 		}
-		int num = Utils.getComTowMin(number % Commons.TWO);
-		combTwo.put(num, 0);
+		int num = Utils.getCombTwoMin(number % Commons.TWO);
+		combTwo.replace(num, 0);
 
 		for (Entry<Integer, Integer> entry : entrySet) {
 			Integer n = entry.getKey();

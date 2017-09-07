@@ -1,12 +1,9 @@
 package com.zf.lottery.data;
 
-import java.util.Arrays;
-
 public class Lottery {
 	private int term = -1;
 	private int time = -1;
 	private int number = -1;
-	private int[] absences = null;
 
 	public int getTerm() {
 		return term;
@@ -20,7 +17,7 @@ public class Lottery {
 		return number;
 	}
 
-	public void setNumbers(int number) {
+	public void setNumber(int number) {
 		this.number = number;
 	}
 
@@ -30,19 +27,5 @@ public class Lottery {
 
 	public void setTime(int time) {
 		this.time = time;
-	}
-
-	public int[] getAbsences() {
-		return absences;
-	}
-
-	public void setAbsences(int[] absences) {
-		this.absences = absences;
-	}
-
-	@Override
-	public String toString() {
-		return "Lottery [term=" + term + ", time=" + time + ", number=" + number + ", absences="
-				+ Arrays.toString(absences) + "]";
 	}
 }

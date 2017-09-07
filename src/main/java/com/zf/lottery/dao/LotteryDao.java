@@ -44,7 +44,7 @@ public class LotteryDao {
 				Lottery lottery = new Lottery();
 				lottery.setTerm(rs.getInt("term"));
 				lottery.setTime(rs.getInt("time"));
-				lottery.setNumbers(rs.getInt("number"));
+				lottery.setNumber(rs.getInt("number"));
 				lotteries.add(lottery);
 			}
 			return lotteries;
@@ -274,7 +274,7 @@ public class LotteryDao {
 	}
 
 	public int[] getMaxCombThree() throws SQLException {
-		int[] numbers = new int[Commons.COMB_THREE];
+		int[] numbers = new int[Commons.GROUP_SIX];
 		int n = 0;
 		for (int i = 0; i < 10; i++) {
 			for (int j = i; j < 10; j++) {
@@ -283,7 +283,7 @@ public class LotteryDao {
 				}
 			}
 		}
-		return getMaxAbsence(numbers, StarType.CombThree.ordinal());
+		return getMaxAbsence(numbers, StarType.GroupThree.ordinal());
 	}
 
 	public int[] getMaxCombTwo() throws SQLException {

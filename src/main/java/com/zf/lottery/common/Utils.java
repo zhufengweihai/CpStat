@@ -3,6 +3,7 @@ package com.zf.lottery.common;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
@@ -26,11 +27,20 @@ public class Utils {
 		return null;
 	}
 
-	public static int getComTowMin(int num) {
+	public static int getCombTwoMin(int num) {
 		int num1 = (num % 10) * 10 + num / 10;
 		return num > num1 ? num1 : num;
 	}
-	
+
+	public static int getCombThreeMin(int num) {
+		int[] nums = new int[3];
+		nums[0] = num / 100;
+		nums[1] = (num / 10) % 10;
+		nums[2] = num % 10;
+		Arrays.sort(nums);
+		return nums[0] * 100 + nums[1] * 10 + nums[2];
+	}
+
 	public static Integer arrange3(int num) {
 		int[] nums = new int[3];
 		nums[0] = num / 100;
