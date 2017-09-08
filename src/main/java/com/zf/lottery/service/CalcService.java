@@ -30,9 +30,11 @@ public class CalcService {
 			int num = lottery.getNumber() % Commons.TWO;
 			int min = Utils.getCombTwoMin(num);
 			ArrayList<Integer> arrayList = absencesMap.get(min);
-			int absence = i - lasts[min];
-			arrayList.add(absence);
-			lasts[min] = i;
+			if (arrayList != null) {
+				int absence = i - lasts[min];
+				arrayList.add(absence);
+				lasts[min] = i;
+			}
 		}
 
 		Map<Integer, Integer> absenceMap = new HashMap<>();

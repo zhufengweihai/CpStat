@@ -12,7 +12,8 @@ import com.zf.lottery.dao.LotteryDao;
 import com.zf.lottery.dao.LotteryManager;
 import com.zf.lottery.data.Lottery;
 import com.zf.lottery.push.PushService;
-import com.zf.lottery.update.LotteryDataRequest;
+import com.zf.lottery.update.LotteryRequestService;
+import com.zf.lottery.update.LotteryRequestServiceImpl;
 
 public class UpdateService {
 	private static Logger logger = LoggerFactory.getLogger(UpdateService.class);
@@ -81,8 +82,8 @@ public class UpdateService {
 	}
 
 	private List<Lottery> requestData() throws Exception {
-		LotteryDataRequest request = new LotteryDataRequest();
-		List<Lottery> latestData = request.requestLastData();
+		LotteryRequestService requestService = new LotteryRequestServiceImpl();
+		List<Lottery> latestData = requestService.requestLatest();
 		int maxTerm = manager.getMaxTerm();
 		for (Iterator<Lottery> it = latestData.iterator(); it.hasNext();) {
 			Lottery lottery = (Lottery) it.next();
