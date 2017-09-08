@@ -1,5 +1,6 @@
 package com.zf.lottery.push;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -7,6 +8,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.zf.lottery.data.GroupStat;
 import com.zf.lottery.data.MaxStat;
 
 import cn.jiguang.common.resp.APIConnectionException;
@@ -23,11 +25,11 @@ public class PushService {
 	private static Logger logger = LoggerFactory.getLogger(PushService.class);
 	private static JPushClient jPushClient = new JPushClient(masterSecret, appKey);
 
-	public static void push(List<MaxStat> maxStats) {
-		if (maxStats == null || maxStats.size() == 0) {
+	public static void push(List<MaxStat> maxStats, List<GroupStat> groupStats) {
+		if ((maxStats == null || maxStats.size() == 0) && (groupStats == null || groupStats.size() == 0)) {
 			return;
 		}
-		String content = toString(maxStats);
+		String content = toString(maxStats, groupStats);
 		PushPayload pushPayload = buildPushObject(content);
 		try {
 			jPushClient.sendPush(pushPayload);
@@ -45,7 +47,14 @@ public class PushService {
 		}
 	}
 
-	private static String toString(List<MaxStat> maxStats) {
+	private static String toString(List<MaxStat> maxStats, List<GroupStat> groupStats) {
+		return maxStatToString(maxStats) + ":" + groupStatToString(groupStats);
+	}
+
+	private static String maxStatToString(List<MaxStat> maxStats) {
+		if (maxStats == null || maxStats.size() == 0) {
+			return "";
+		}
 		StringBuilder sb = new StringBuilder();
 		for (MaxStat maxStat : maxStats) {
 			sb.append(maxStat.getType()).append(',');
@@ -54,6 +63,30 @@ public class PushService {
 			sb.append(maxStat.getMaxAbsence()).append(';');
 		}
 		return sb.substring(0, sb.length() - 1);
+	}
+
+	private static String groupStatToString(List<GroupStat> groupStats) {
+		if (groupStats == null || groupStats.size() == 0) {
+			return "";
+		}
+		StringBuilder sb = new StringBuilder();
+		for (GroupStat groupStat : groupStats) {
+			sb.append(groupStat.getType()).append(',');
+			sb.append(toString(groupStat.getNumber())).append(',');
+			sb.append(toString(groupStat.getAbsences())).append(';');
+		}
+		return sb.substring(0, sb.length() - 1);
+	}
+
+	private static String toString(int[] a) {
+		int iMax = a.length - 1;
+		StringBuilder b = new StringBuilder();
+		for (int i = 0;; i++) {
+			b.append(a[i]);
+			if (i == iMax)
+				return b.toString();
+			b.append("-");
+		}
 	}
 
 	private static PushPayload buildPushObject(String content) {

@@ -48,12 +48,13 @@ public class StatService {
 
 	private LotteryManager manager = LotteryManager.instance();
 
-	public void checkMax() {
-		List<MaxStat> stats = statMax();
-		PushService.push(stats);
+	public void statAndPush() {
+		List<MaxStat> maxStats = checkMax();
+		List<GroupStat> groupStats = new ArrayList<>();
+		PushService.push(maxStats, groupStats);
 	}
 
-	private List<MaxStat> statMax() {
+	private List<MaxStat> checkMax() {
 		List<MaxStat> stats = new ArrayList<>();
 
 		int[] firstTwo = manager.getFirstTwo();
@@ -85,13 +86,23 @@ public class StatService {
 		return stats;
 	}
 
-	public void checkProbability() {
-		checkTwoProbability(manager.getFirstTwo(), StarType.FirstTwo);
-		checkTwoProbability(manager.getLastTwo(), StarType.LastTwo);
-		checkThreeProbability(manager.getFirstThree(), StarType.FirstThree);
-		checkThreeProbability(manager.getLastThree(), StarType.LastThree);
-		checkCombTwoProbability(manager.getCombTwo(), StarType.CombTwo);
-		checkGroupSixProbability(manager.getCombTwo(), StarType.GroupSix);
+	private List<GroupStat> checkProbability() {
+		List<GroupStat> stats = new ArrayList<>();
+		List<GroupStat> firstTwoStats = checkTwoProbability(manager.getFirstTwo(), StarType.FirstTwo);
+		stats.addAll(firstTwoStats);
+		List<GroupStat> lastTwoStats = checkTwoProbability(manager.getLastTwo(), StarType.LastTwo);
+		stats.addAll(lastTwoStats);
+		List<GroupStat> firstThreeStats = checkThreeProbability(manager.getFirstThree(), StarType.FirstThree);
+		stats.addAll(firstThreeStats);
+		List<GroupStat> lastThreeStats = checkThreeProbability(manager.getLastThree(), StarType.LastThree);
+		stats.addAll(lastThreeStats);
+		List<GroupStat> combTwoStats = checkCombTwoProbability(manager.getCombTwo(), StarType.CombTwo);
+		stats.addAll(combTwoStats);
+		List<GroupStat> groupSixStats = checkGroupSixProbability(manager.getGroupSix(), StarType.GroupSix);
+		stats.addAll(groupSixStats);
+		List<GroupStat> groupThreeStats = checkGroupThreeProbability(manager.getGroupSix(), StarType.GroupThree);
+		stats.addAll(groupThreeStats);
+		return stats;
 	}
 
 	private List<GroupStat> checkTwoProbability(int[] absences, StarType type) {

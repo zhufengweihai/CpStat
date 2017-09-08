@@ -73,7 +73,7 @@ public class UpdateService {
 				throw new Exception();
 			}
 
-			statService.checkMax();
+			statService.statAndPush();
 			lotteryDao.saveLatestData(latestData);
 		} catch (Exception e) {
 			logger.error("update failed", e);

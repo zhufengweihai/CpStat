@@ -1,7 +1,7 @@
 package com.zf.lottery.data;
 
 public class GroupStat {
-	public static final String KEY_MAX_STAT = "MaxStat";
+	public static final String KEY_GROUP_STAT = "GroupStat";
 
 	private int type = -1;
 	private int[] number = null;
