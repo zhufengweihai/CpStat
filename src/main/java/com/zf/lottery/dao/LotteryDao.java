@@ -19,7 +19,7 @@ import com.zf.lottery.data.StarType;
 public class LotteryDao {
 	private static Logger logger = LoggerFactory.getLogger(LotteryDao.class);
 	private static final String SQLITE_JDBC = "org.sqlite.JDBC";
-	private static final String SQL_DB = "jdbc:sqlite://d:/db/cp.db";
+	private static final String SQL_DB = "jdbc:sqlite://c:/db/cp.db";
 
 	public void init() throws ClassNotFoundException {
 		Class.forName(SQLITE_JDBC);

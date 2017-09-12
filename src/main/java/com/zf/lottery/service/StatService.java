@@ -1,6 +1,8 @@
 package com.zf.lottery.service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -50,7 +52,7 @@ public class StatService {
 
 	public void statAndPush() {
 		List<MaxStat> maxStats = checkMax();
-		List<GroupStat> groupStats = new ArrayList<>();
+		List<GroupStat> groupStats = checkProbability();
 		PushService.push(maxStats, groupStats);
 	}
 
@@ -201,6 +203,64 @@ public class StatService {
 		return stats;
 	}
 
+	private void name(int[] absences, int threshold) {
+		Map<Integer, Integer> twoMap = new HashMap<>();
+		for (int i = 0; i < absences.length; i++) {
+			if (absences[i] >= threshold) {
+				twoMap.put(i, absences[i]);
+			}
+		}
+		if (threshold <= 1) {
+			return;
+		}
+
+	}
+
+	/**
+	 * 组合选择（从列表中选择n个组合）
+	 * 
+	 * @param dataList
+	 *            待选列表
+	 * @param n
+	 *            选择个数
+	 */
+	public static void combinationSelect(int[] dataList, int n) {
+		List<int[]> list = new ArrayList<>();
+		combinationSelect(dataList, list, 0, new int[n], 0);
+		for (int[] is : list) {
+			System.out.println(Arrays.toString(is));
+		}
+		
+	}
+
+	/**
+	 * 组合选择
+	 * 
+	 * @param dataList
+	 *            待选列表
+	 * @param dataIndex
+	 *            待选开始索引
+	 * @param resultList
+	 *            前面（resultIndex-1）个的组合结果
+	 * @param resultIndex
+	 *            选择索引，从0开始
+	 */
+	private static void combinationSelect(int[] dataList, List<int[]> list, int dataIndex, int[] resultList,
+			int resultIndex) {
+		int resultLen = resultList.length;
+		int resultCount = resultIndex + 1;
+		if (resultCount > resultLen) { // 全部选择完时，输出组合结果
+			list.add(resultList.clone());
+			return;
+		}
+
+		// 递归选择下一个
+		for (int i = dataIndex; i < dataList.length + resultCount - resultLen; i++) {
+			resultList[resultIndex] = dataList[i];
+			combinationSelect(dataList, list, i + 1, resultList, resultIndex + 1);
+		}
+	}
+	
 	private List<GroupStat> checkCombTwoProbability(Map<Integer, Integer> absenceMap, StarType type) {
 		List<GroupStat> stats = new ArrayList<>();
 
