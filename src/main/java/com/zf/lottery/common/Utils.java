@@ -64,4 +64,25 @@ public class Utils {
 			}
 		}
 	}
+
+	public static List<int[]> combination(List<Integer> dataList, int n) {
+		List<int[]> result = new ArrayList<>();
+		combination(dataList, result, 0, new int[n], 0);
+		return result;
+	}
+
+	private static void combination(List<Integer> dataList, List<int[]> list, int dataIndex, int[] resultList,
+			int resultIndex) {
+		int resultLen = resultList.length;
+		int resultCount = resultIndex + 1;
+		if (resultCount > resultLen) {
+			list.add(resultList.clone());
+			return;
+		}
+
+		for (int i = dataIndex; i < dataList.size() + resultCount - resultLen; i++) {
+			resultList[resultIndex] = dataList.get(i);
+			combination(dataList, list, i + 1, resultList, resultIndex + 1);
+		}
+	}
 }

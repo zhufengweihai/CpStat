@@ -1,13 +1,15 @@
 package com.zf.lottery.service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.apache.commons.lang3.RandomUtils;
+
+import com.zf.lottery.common.Utils;
 import com.zf.lottery.dao.LotteryManager;
 import com.zf.lottery.data.GroupStat;
 import com.zf.lottery.data.MaxStat;
@@ -18,35 +20,35 @@ public class StatService {
 	private static final int THRESHOLD_MAX = 100;
 	private static final int WILL_VALUE = 8;
 
-	private static final int THRESHOLD_THREE = (int) (WILL_VALUE / 0.001f);
-	private static final int THRESHOLD_THREE_TWO = (int) (WILL_VALUE / 0.02f);
-	private static final int THRESHOLD_THREE_THREE = (int) (WILL_VALUE / 0.03f);
-	private static final int THRESHOLD_THREE_FOUR = (int) (WILL_VALUE / 0.04f);
-	private static final int THRESHOLD_THREE_FIVE = (int) (WILL_VALUE / 0.05f);
+	private static final int THRESHOLD_THREE = Math.round(WILL_VALUE / 0.001f);
+	private static final int THRESHOLD_THREE_TWO = Math.round(WILL_VALUE / 0.002f);
+	private static final int THRESHOLD_THREE_THREE = Math.round(WILL_VALUE / 0.003f);
+	private static final int THRESHOLD_THREE_FOUR = Math.round(WILL_VALUE / 0.004f);
+	private static final int THRESHOLD_THREE_FIVE = Math.round(WILL_VALUE / 0.005f);
 
-	private static final int THRESHOLD_GROUP_SIX = (int) (WILL_VALUE / 0.006f);
-	private static final int THRESHOLD_GROUP_SIX_TWO = (int) (WILL_VALUE / 0.012f);
-	private static final int THRESHOLD_GROUP_SIX_THREE = (int) (WILL_VALUE / 0.018f);
-	private static final int THRESHOLD_GROUP_SIX_FOUR = (int) (WILL_VALUE / 0.024f);
-	private static final int THRESHOLD_GROUP_SIX_FIVE = (int) (WILL_VALUE / 0.03f);
+	private static final int THRESHOLD_GROUP_SIX = Math.round(WILL_VALUE / 0.006f);
+	private static final int THRESHOLD_GROUP_SIX_TWO = Math.round(WILL_VALUE / 0.012f);
+	private static final int THRESHOLD_GROUP_SIX_THREE = Math.round(WILL_VALUE / 0.018f);
+	private static final int THRESHOLD_GROUP_SIX_FOUR = Math.round(WILL_VALUE / 0.024f);
+	private static final int THRESHOLD_GROUP_SIX_FIVE = Math.round(WILL_VALUE / 0.03f);
 
-	private static final int THRESHOLD_GROUP_THREE = (int) (WILL_VALUE / 0.003f);
-	private static final int THRESHOLD_GROUP_THREE_TWO = (int) (WILL_VALUE / 0.006f);
-	private static final int THRESHOLD_GROUP_THREE_THREE = (int) (WILL_VALUE / 0.009f);
-	private static final int THRESHOLD_GROUP_THREE_FOUR = (int) (WILL_VALUE / 0.012f);
-	private static final int THRESHOLD_GROUP_THREE_FIVE = (int) (WILL_VALUE / 0.015f);
+	private static final int THRESHOLD_GROUP_THREE = Math.round(WILL_VALUE / 0.003f);
+	private static final int THRESHOLD_GROUP_THREE_TWO = Math.round(WILL_VALUE / 0.006f);
+	private static final int THRESHOLD_GROUP_THREE_THREE = Math.round(WILL_VALUE / 0.009f);
+	private static final int THRESHOLD_GROUP_THREE_FOUR = Math.round(WILL_VALUE / 0.012f);
+	private static final int THRESHOLD_GROUP_THREE_FIVE = Math.round(WILL_VALUE / 0.015f);
 
-	private static final int THRESHOLD_TWO = (int) (WILL_VALUE / 0.01f);
-	private static final int THRESHOLD_TWO_TWO = (int) (WILL_VALUE / 0.02f);
-	private static final int THRESHOLD_TWO_THREE = (int) (WILL_VALUE / 0.03f);
-	private static final int THRESHOLD_TWO_FOUR = (int) (WILL_VALUE / 0.04f);
-	private static final int THRESHOLD_TWO_FIVE = (int) (WILL_VALUE / 0.05f);
+	private static final int THRESHOLD_TWO = Math.round(WILL_VALUE / 0.01f);
+	private static final int THRESHOLD_TWO_TWO = Math.round(WILL_VALUE / 0.02f);
+	private static final int THRESHOLD_TWO_THREE = Math.round(WILL_VALUE / 0.03f);
+	private static final int THRESHOLD_TWO_FOUR = Math.round(WILL_VALUE / 0.04f);
+	private static final int THRESHOLD_TWO_FIVE = Math.round(WILL_VALUE / 0.05f);
 
-	private static final int THRESHOLD_COMB_TWO = (int) (WILL_VALUE / 0.02f);
-	private static final int THRESHOLD_COMB_TWO_TWO = (int) (WILL_VALUE / 0.04f);
-	private static final int THRESHOLD_COMB_TWO_THREE = (int) (WILL_VALUE / 0.06f);
-	private static final int THRESHOLD_COMB_TWO_FOUR = (int) (WILL_VALUE / 0.08f);
-	private static final int THRESHOLD_COMB_TWO_FIVE = (int) (WILL_VALUE / 0.1f);
+	private static final int THRESHOLD_COMB_TWO = Math.round(WILL_VALUE / 0.02f);
+	private static final int THRESHOLD_COMB_TWO_TWO = Math.round(WILL_VALUE / 0.04f);
+	private static final int THRESHOLD_COMB_TWO_THREE = Math.round(WILL_VALUE / 0.06f);
+	private static final int THRESHOLD_COMB_TWO_FOUR = Math.round(WILL_VALUE / 0.08f);
+	private static final int THRESHOLD_COMB_TWO_FIVE = Math.round(WILL_VALUE / 0.1f);
 
 	private LotteryManager manager = LotteryManager.instance();
 
@@ -109,553 +111,152 @@ public class StatService {
 
 	private List<GroupStat> checkTwoProbability(int[] absences, StarType type) {
 		List<GroupStat> stats = new ArrayList<>();
-
-		for (int i = 0; i < absences.length; i++) {
-			if (absences[i] >= THRESHOLD_TWO) {
-				GroupStat stat = new GroupStat();
-				stat.setType((type.ordinal()));
-				stat.setNumber(i);
-				stat.setAbsences(absences[i]);
-				stats.add(stat);
-			}
-		}
-
-		for (int i = 0; i < absences.length; i++) {
-			if (absences[i] >= THRESHOLD_TWO_TWO) {
-				for (int j = i + 1; j < absences.length; j++) {
-					if (absences[j] >= THRESHOLD_TWO_TWO) {
-						GroupStat stat = new GroupStat();
-						stat.setType((type.ordinal()));
-						stat.setNumber(i, j);
-						stat.setAbsences(absences[i], absences[j]);
-						stats.add(stat);
-					}
-				}
-			}
-		}
-
-		for (int i = 0; i < absences.length; i++) {
-			if (absences[i] >= THRESHOLD_TWO_THREE) {
-				for (int j = i + 1; j < absences.length; j++) {
-					if (absences[j] >= THRESHOLD_TWO_THREE) {
-						for (int m = j + 1; m < absences.length; m++) {
-							if (absences[m] >= THRESHOLD_TWO_THREE) {
-								GroupStat stat = new GroupStat();
-								stat.setType((type.ordinal()));
-								stat.setNumber(i, j, m);
-								stat.setAbsences(absences[i], absences[j], absences[m]);
-								stats.add(stat);
-							}
-						}
-					}
-				}
-			}
-		}
-
-		for (int i = 0; i < absences.length; i++) {
-			if (absences[i] >= THRESHOLD_TWO_FOUR) {
-				for (int j = i + 1; j < absences.length; j++) {
-					if (absences[j] >= THRESHOLD_TWO_FOUR) {
-						for (int m = j + 1; m < absences.length; m++) {
-							if (absences[m] >= THRESHOLD_TWO_FOUR) {
-								for (int n = j + 1; n < absences.length; n++) {
-									if (absences[n] >= THRESHOLD_TWO_FOUR) {
-										GroupStat stat = new GroupStat();
-										stat.setType((type.ordinal()));
-										stat.setNumber(i, j, m, n);
-										stat.setAbsences(absences[i], absences[j], absences[m], absences[n]);
-										stats.add(stat);
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-
-		for (int i = 0; i < absences.length; i++) {
-			if (absences[i] >= THRESHOLD_TWO_FIVE) {
-				for (int j = i + 1; j < absences.length; j++) {
-					if (absences[j] >= THRESHOLD_TWO_FIVE) {
-						for (int m = j + 1; m < absences.length; m++) {
-							if (absences[m] >= THRESHOLD_TWO_FIVE) {
-								for (int n = j + 1; n < absences.length; n++) {
-									if (absences[n] >= THRESHOLD_TWO_FIVE) {
-										for (int k = j + 1; k < absences.length; k++) {
-											if (absences[k] >= THRESHOLD_TWO_FIVE) {
-												GroupStat stat = new GroupStat();
-												stat.setType((type.ordinal()));
-												stat.setNumber(i, j, m, n, k);
-												stat.setAbsences(absences[i], absences[j], absences[m], absences[n],
-														absences[k]);
-												stats.add(stat);
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		}
+		List<GroupStat> oneStats = calcGroupStats(absences, THRESHOLD_TWO, 1, type.ordinal());
+		stats.addAll(oneStats);
+		List<GroupStat> twoStats = calcGroupStats(absences, THRESHOLD_TWO_TWO, 2, type.ordinal());
+		stats.addAll(twoStats);
+		List<GroupStat> threeStats = calcGroupStats(absences, THRESHOLD_TWO_THREE, 3, type.ordinal());
+		stats.addAll(threeStats);
+		List<GroupStat> fourStats = calcGroupStats(absences, THRESHOLD_TWO_FOUR, 4, type.ordinal());
+		stats.addAll(fourStats);
+		List<GroupStat> fiveStats = calcGroupStats(absences, THRESHOLD_TWO_FIVE, 5, type.ordinal());
+		stats.addAll(fiveStats);
 		return stats;
 	}
 
-	private void name(int[] absences, int threshold) {
-		Map<Integer, Integer> twoMap = new HashMap<>();
-		for (int i = 0; i < absences.length; i++) {
-			if (absences[i] >= threshold) {
-				twoMap.put(i, absences[i]);
-			}
-		}
-		if (threshold <= 1) {
-			return;
-		}
-
-	}
-
-	/**
-	 * 组合选择（从列表中选择n个组合）
-	 * 
-	 * @param dataList
-	 *            待选列表
-	 * @param n
-	 *            选择个数
-	 */
-	public static void combinationSelect(int[] dataList, int n) {
-		List<int[]> list = new ArrayList<>();
-		combinationSelect(dataList, list, 0, new int[n], 0);
-		for (int[] is : list) {
-			System.out.println(Arrays.toString(is));
-		}
-		
-	}
-
-	/**
-	 * 组合选择
-	 * 
-	 * @param dataList
-	 *            待选列表
-	 * @param dataIndex
-	 *            待选开始索引
-	 * @param resultList
-	 *            前面（resultIndex-1）个的组合结果
-	 * @param resultIndex
-	 *            选择索引，从0开始
-	 */
-	private static void combinationSelect(int[] dataList, List<int[]> list, int dataIndex, int[] resultList,
-			int resultIndex) {
-		int resultLen = resultList.length;
-		int resultCount = resultIndex + 1;
-		if (resultCount > resultLen) { // 全部选择完时，输出组合结果
-			list.add(resultList.clone());
-			return;
-		}
-
-		// 递归选择下一个
-		for (int i = dataIndex; i < dataList.length + resultCount - resultLen; i++) {
-			resultList[resultIndex] = dataList[i];
-			combinationSelect(dataList, list, i + 1, resultList, resultIndex + 1);
-		}
-	}
-	
 	private List<GroupStat> checkCombTwoProbability(Map<Integer, Integer> absenceMap, StarType type) {
 		List<GroupStat> stats = new ArrayList<>();
-
-		Set<Entry<Integer, Integer>> entrySet = absenceMap.entrySet();
-		for (Entry<Integer, Integer> entry : entrySet) {
-			if (entry.getValue() >= THRESHOLD_COMB_TWO) {
-				GroupStat stat = new GroupStat();
-				stat.setType((type.ordinal()));
-				stat.setNumber(entry.getKey());
-				stat.setAbsences(entry.getValue());
-				stats.add(stat);
-			}
-		}
-
-		for (Entry<Integer, Integer> entry1 : entrySet) {
-			if (entry1.getValue() >= THRESHOLD_COMB_TWO_TWO) {
-				for (Entry<Integer, Integer> entry2 : entrySet) {
-					if (entry2.getValue() >= THRESHOLD_COMB_TWO_TWO) {
-						GroupStat stat = new GroupStat();
-						stat.setType((type.ordinal()));
-						stat.setNumber(entry1.getKey(), entry2.getKey());
-						stat.setAbsences(entry1.getValue(), entry2.getValue());
-						stats.add(stat);
-					}
-				}
-			}
-		}
-
-		for (Entry<Integer, Integer> entry1 : entrySet) {
-			if (entry1.getValue() >= THRESHOLD_COMB_TWO_THREE) {
-				for (Entry<Integer, Integer> entry2 : entrySet) {
-					if (entry2.getValue() >= THRESHOLD_COMB_TWO_THREE) {
-						for (Entry<Integer, Integer> entry3 : entrySet) {
-							if (entry3.getValue() >= THRESHOLD_COMB_TWO_THREE) {
-								GroupStat stat = new GroupStat();
-								stat.setType((type.ordinal()));
-								stat.setNumber(entry1.getKey(), entry2.getKey(), entry3.getKey());
-								stat.setAbsences(entry1.getValue(), entry2.getValue(), entry3.getValue());
-								stats.add(stat);
-							}
-						}
-					}
-				}
-			}
-		}
-
-		for (Entry<Integer, Integer> entry1 : entrySet) {
-			if (entry1.getValue() >= THRESHOLD_COMB_TWO_FOUR) {
-				for (Entry<Integer, Integer> entry2 : entrySet) {
-					if (entry2.getValue() >= THRESHOLD_COMB_TWO_FOUR) {
-						for (Entry<Integer, Integer> entry3 : entrySet) {
-							if (entry3.getValue() >= THRESHOLD_COMB_TWO_FOUR) {
-								for (Entry<Integer, Integer> entry4 : entrySet) {
-									if (entry4.getValue() >= THRESHOLD_COMB_TWO_FOUR) {
-										GroupStat stat = new GroupStat();
-										stat.setType((type.ordinal()));
-										stat.setNumber(entry1.getKey(), entry2.getKey(), entry3.getKey(),
-												entry4.getKey());
-										stat.setAbsences(entry1.getValue(), entry2.getValue(), entry3.getValue(),
-												entry4.getValue());
-										stats.add(stat);
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-
-		for (Entry<Integer, Integer> entry1 : entrySet) {
-			if (entry1.getValue() >= THRESHOLD_COMB_TWO_FIVE) {
-				for (Entry<Integer, Integer> entry2 : entrySet) {
-					if (entry2.getValue() >= THRESHOLD_COMB_TWO_FIVE) {
-						for (Entry<Integer, Integer> entry3 : entrySet) {
-							if (entry3.getValue() >= THRESHOLD_COMB_TWO_FIVE) {
-								for (Entry<Integer, Integer> entry4 : entrySet) {
-									if (entry4.getValue() >= THRESHOLD_COMB_TWO_FIVE) {
-										for (Entry<Integer, Integer> entry5 : entrySet) {
-											if (entry5.getValue() >= THRESHOLD_COMB_TWO_FIVE) {
-												GroupStat stat = new GroupStat();
-												stat.setType((type.ordinal()));
-												stat.setNumber(entry1.getKey(), entry2.getKey(), entry3.getKey(),
-														entry4.getKey(), entry5.getKey());
-												stat.setAbsences(entry1.getValue(), entry2.getValue(),
-														entry3.getValue(), entry4.getValue(), entry5.getValue());
-												stats.add(stat);
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-
+		List<GroupStat> oneStats = calcGroupStats(absenceMap, THRESHOLD_COMB_TWO, 1, type.ordinal());
+		stats.addAll(oneStats);
+		List<GroupStat> twoStats = calcGroupStats(absenceMap, THRESHOLD_COMB_TWO_TWO, 2, type.ordinal());
+		stats.addAll(twoStats);
+		List<GroupStat> threeStats = calcGroupStats(absenceMap, THRESHOLD_COMB_TWO_THREE, 3, type.ordinal());
+		stats.addAll(threeStats);
+		List<GroupStat> fourStats = calcGroupStats(absenceMap, THRESHOLD_COMB_TWO_FOUR, 4, type.ordinal());
+		stats.addAll(fourStats);
+		List<GroupStat> fiveStats = calcGroupStats(absenceMap, THRESHOLD_COMB_TWO_FIVE, 5, type.ordinal());
+		stats.addAll(fiveStats);
 		return stats;
 	}
 
 	private List<GroupStat> checkThreeProbability(int[] absences, StarType type) {
 		List<GroupStat> stats = new ArrayList<>();
-		for (int i = 0; i < absences.length; i++) {
-			if (absences[i] >= THRESHOLD_THREE) {
-				GroupStat stat = new GroupStat();
-				stat.setType((type.ordinal()));
-				stat.setNumber(i);
-				stat.setAbsences(absences[i]);
-				stats.add(stat);
-			}
-		}
-
-		for (int i = 0; i < absences.length; i++) {
-			if (absences[i] >= THRESHOLD_THREE_TWO) {
-				for (int j = i + 1; j < absences.length; j++) {
-					if (absences[j] >= THRESHOLD_THREE_TWO) {
-						GroupStat stat = new GroupStat();
-						stat.setType((type.ordinal()));
-						stat.setNumber(i, j);
-						stat.setAbsences(absences[i], absences[j]);
-						stats.add(stat);
-					}
-				}
-			}
-		}
-
-		for (int i = 0; i < absences.length; i++) {
-			if (absences[i] >= THRESHOLD_THREE_THREE) {
-				for (int j = i + 1; j < absences.length; j++) {
-					if (absences[j] >= THRESHOLD_THREE_THREE) {
-						for (int m = j + 1; m < absences.length; m++) {
-							if (absences[m] >= THRESHOLD_THREE_THREE) {
-								GroupStat stat = new GroupStat();
-								stat.setType((type.ordinal()));
-								stat.setNumber(i, j, m);
-								stat.setAbsences(absences[i], absences[j], absences[m]);
-								stats.add(stat);
-							}
-						}
-					}
-				}
-			}
-		}
-
-		for (int i = 0; i < absences.length; i++) {
-			if (absences[i] >= THRESHOLD_THREE_FOUR) {
-				for (int j = i + 1; j < absences.length; j++) {
-					if (absences[j] >= THRESHOLD_THREE_FOUR) {
-						for (int m = j + 1; m < absences.length; m++) {
-							if (absences[m] >= THRESHOLD_THREE_FOUR) {
-								for (int n = j + 1; n < absences.length; n++) {
-									if (absences[n] >= THRESHOLD_THREE_FOUR) {
-										GroupStat stat = new GroupStat();
-										stat.setType((type.ordinal()));
-										stat.setNumber(i, j, m, n);
-										stat.setAbsences(absences[i], absences[j], absences[m], absences[n]);
-										stats.add(stat);
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-
-		for (int i = 0; i < absences.length; i++) {
-			if (absences[i] >= THRESHOLD_THREE_FIVE) {
-				for (int j = i + 1; j < absences.length; j++) {
-					if (absences[j] >= THRESHOLD_THREE_FIVE) {
-						for (int m = j + 1; m < absences.length; m++) {
-							if (absences[m] >= THRESHOLD_THREE_FIVE) {
-								for (int n = j + 1; n < absences.length; n++) {
-									if (absences[n] >= THRESHOLD_THREE_FIVE) {
-										for (int k = j + 1; k < absences.length; k++) {
-											if (absences[k] >= THRESHOLD_THREE_FIVE) {
-												GroupStat stat = new GroupStat();
-												stat.setType((type.ordinal()));
-												stat.setNumber(i, j, m, n, k);
-												stat.setAbsences(absences[i], absences[j], absences[m], absences[n],
-														absences[k]);
-												stats.add(stat);
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		}
+		List<GroupStat> oneStats = calcGroupStats(absences, THRESHOLD_THREE, 1, type.ordinal());
+		stats.addAll(oneStats);
+		List<GroupStat> twoStats = calcGroupStats(absences, THRESHOLD_THREE_TWO, 2, type.ordinal());
+		stats.addAll(twoStats);
+		List<GroupStat> threeStats = calcGroupStats(absences, THRESHOLD_THREE_THREE, 3, type.ordinal());
+		stats.addAll(threeStats);
+		List<GroupStat> fourStats = calcGroupStats(absences, THRESHOLD_THREE_FOUR, 4, type.ordinal());
+		stats.addAll(fourStats);
+		List<GroupStat> fiveStats = calcGroupStats(absences, THRESHOLD_THREE_FIVE, 5, type.ordinal());
+		stats.addAll(fiveStats);
 		return stats;
 	}
 
 	private List<GroupStat> checkGroupSixProbability(Map<Integer, Integer> absenceMap, StarType type) {
 		List<GroupStat> stats = new ArrayList<>();
-
-		Set<Entry<Integer, Integer>> entrySet = absenceMap.entrySet();
-		for (Entry<Integer, Integer> entry : entrySet) {
-			if (entry.getValue() >= THRESHOLD_GROUP_SIX) {
-				GroupStat stat = new GroupStat();
-				stat.setType((type.ordinal()));
-				stat.setNumber(entry.getKey());
-				stat.setAbsences(entry.getValue());
-				stats.add(stat);
-			}
-		}
-
-		for (Entry<Integer, Integer> entry1 : entrySet) {
-			if (entry1.getValue() >= THRESHOLD_GROUP_SIX_TWO) {
-				for (Entry<Integer, Integer> entry2 : entrySet) {
-					if (entry2.getValue() >= THRESHOLD_GROUP_SIX_TWO) {
-						GroupStat stat = new GroupStat();
-						stat.setType((type.ordinal()));
-						stat.setNumber(entry1.getKey(), entry2.getKey());
-						stat.setAbsences(entry1.getValue(), entry2.getValue());
-						stats.add(stat);
-					}
-				}
-			}
-		}
-
-		for (Entry<Integer, Integer> entry1 : entrySet) {
-			if (entry1.getValue() >= THRESHOLD_GROUP_SIX_THREE) {
-				for (Entry<Integer, Integer> entry2 : entrySet) {
-					if (entry2.getValue() >= THRESHOLD_GROUP_SIX_THREE) {
-						for (Entry<Integer, Integer> entry3 : entrySet) {
-							if (entry3.getValue() >= THRESHOLD_GROUP_SIX_THREE) {
-								GroupStat stat = new GroupStat();
-								stat.setType((type.ordinal()));
-								stat.setNumber(entry1.getKey(), entry2.getKey(), entry3.getKey());
-								stat.setAbsences(entry1.getValue(), entry2.getValue(), entry3.getValue());
-								stats.add(stat);
-							}
-						}
-					}
-				}
-			}
-		}
-
-		for (Entry<Integer, Integer> entry1 : entrySet) {
-			if (entry1.getValue() >= THRESHOLD_GROUP_SIX_FOUR) {
-				for (Entry<Integer, Integer> entry2 : entrySet) {
-					if (entry2.getValue() >= THRESHOLD_GROUP_SIX_FOUR) {
-						for (Entry<Integer, Integer> entry3 : entrySet) {
-							if (entry3.getValue() >= THRESHOLD_GROUP_SIX_FOUR) {
-								for (Entry<Integer, Integer> entry4 : entrySet) {
-									if (entry4.getValue() >= THRESHOLD_GROUP_SIX_FOUR) {
-										GroupStat stat = new GroupStat();
-										stat.setType((type.ordinal()));
-										stat.setNumber(entry1.getKey(), entry2.getKey(), entry3.getKey(),
-												entry4.getKey());
-										stat.setAbsences(entry1.getValue(), entry2.getValue(), entry3.getValue(),
-												entry4.getValue());
-										stats.add(stat);
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-
-		for (Entry<Integer, Integer> entry1 : entrySet) {
-			if (entry1.getValue() >= THRESHOLD_GROUP_SIX_FIVE) {
-				for (Entry<Integer, Integer> entry2 : entrySet) {
-					if (entry2.getValue() >= THRESHOLD_GROUP_SIX_FIVE) {
-						for (Entry<Integer, Integer> entry3 : entrySet) {
-							if (entry3.getValue() >= THRESHOLD_GROUP_SIX_FIVE) {
-								for (Entry<Integer, Integer> entry4 : entrySet) {
-									if (entry4.getValue() >= THRESHOLD_GROUP_SIX_FIVE) {
-										for (Entry<Integer, Integer> entry5 : entrySet) {
-											if (entry5.getValue() >= THRESHOLD_GROUP_SIX_FIVE) {
-												GroupStat stat = new GroupStat();
-												stat.setType((type.ordinal()));
-												stat.setNumber(entry1.getKey(), entry2.getKey(), entry3.getKey(),
-														entry4.getKey(), entry5.getKey());
-												stat.setAbsences(entry1.getValue(), entry2.getValue(),
-														entry3.getValue(), entry4.getValue(), entry5.getValue());
-												stats.add(stat);
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-
+		List<GroupStat> oneStats = calcGroupStats(absenceMap, THRESHOLD_GROUP_SIX, 1, type.ordinal());
+		stats.addAll(oneStats);
+		List<GroupStat> twoStats = calcGroupStats(absenceMap, THRESHOLD_GROUP_SIX_TWO, 2, type.ordinal());
+		stats.addAll(twoStats);
+		List<GroupStat> threeStats = calcGroupStats(absenceMap, THRESHOLD_GROUP_SIX_THREE, 3, type.ordinal());
+		stats.addAll(threeStats);
+		List<GroupStat> fourStats = calcGroupStats(absenceMap, THRESHOLD_GROUP_SIX_FOUR, 4, type.ordinal());
+		stats.addAll(fourStats);
+		List<GroupStat> fiveStats = calcGroupStats(absenceMap, THRESHOLD_GROUP_SIX_FIVE, 5, type.ordinal());
+		stats.addAll(fiveStats);
 		return stats;
 	}
 
 	private List<GroupStat> checkGroupThreeProbability(Map<Integer, Integer> absenceMap, StarType type) {
 		List<GroupStat> stats = new ArrayList<>();
+		List<GroupStat> oneStats = calcGroupStats(absenceMap, THRESHOLD_GROUP_THREE, 1, type.ordinal());
+		stats.addAll(oneStats);
+		List<GroupStat> twoStats = calcGroupStats(absenceMap, THRESHOLD_GROUP_THREE_TWO, 2, type.ordinal());
+		stats.addAll(twoStats);
+		List<GroupStat> threeStats = calcGroupStats(absenceMap, THRESHOLD_GROUP_THREE_THREE, 3, type.ordinal());
+		stats.addAll(threeStats);
+		List<GroupStat> fourStats = calcGroupStats(absenceMap, THRESHOLD_GROUP_THREE_FOUR, 4, type.ordinal());
+		stats.addAll(fourStats);
+		List<GroupStat> fiveStats = calcGroupStats(absenceMap, THRESHOLD_GROUP_THREE_FIVE, 5, type.ordinal());
+		stats.addAll(fiveStats);
+		return stats;
+	}
 
+	private List<GroupStat> calcGroupStats(int[] absences, int threshold, int count, int type) {
+		List<GroupStat> stats = new ArrayList<>();
+		List<Integer> list = new ArrayList<>();
+		for (int i = 0; i < absences.length; i++) {
+			if (absences[i] >= threshold) {
+				list.add(i);
+			}
+		}
+		if (list.size() < count) {
+			return stats;
+		}
+
+		List<int[]> combList = Utils.combination(list, count);
+		for (int[] comb : combList) {
+			GroupStat stat = new GroupStat();
+			stat.setType((type));
+			int[] ab = new int[comb.length];
+			for (int k = 0; k < ab.length; k++) {
+				ab[k] = absences[comb[k]];
+			}
+			stat.setNumber(comb);
+			stat.setAbsences(ab);
+			stats.add(stat);
+		}
+		return stats;
+	}
+
+	private List<GroupStat> calcGroupStats(Map<Integer, Integer> absenceMap, int threshold, int count, int type) {
+		List<GroupStat> stats = new ArrayList<>();
+		List<Integer> list = new ArrayList<>();
 		Set<Entry<Integer, Integer>> entrySet = absenceMap.entrySet();
 		for (Entry<Integer, Integer> entry : entrySet) {
-			if (entry.getValue() >= THRESHOLD_GROUP_THREE) {
-				GroupStat stat = new GroupStat();
-				stat.setType((type.ordinal()));
-				stat.setNumber(entry.getKey());
-				stat.setAbsences(entry.getValue());
-				stats.add(stat);
+			if (entry.getValue() >= threshold) {
+				list.add(entry.getKey());
 			}
 		}
-
-		for (Entry<Integer, Integer> entry1 : entrySet) {
-			if (entry1.getValue() >= THRESHOLD_GROUP_THREE_TWO) {
-				for (Entry<Integer, Integer> entry2 : entrySet) {
-					if (entry2.getValue() >= THRESHOLD_GROUP_THREE_TWO) {
-						GroupStat stat = new GroupStat();
-						stat.setType((type.ordinal()));
-						stat.setNumber(entry1.getKey(), entry2.getKey());
-						stat.setAbsences(entry1.getValue(), entry2.getValue());
-						stats.add(stat);
-					}
-				}
-			}
+		if (list.size() < count) {
+			return stats;
 		}
 
-		for (Entry<Integer, Integer> entry1 : entrySet) {
-			if (entry1.getValue() >= THRESHOLD_GROUP_THREE_THREE) {
-				for (Entry<Integer, Integer> entry2 : entrySet) {
-					if (entry2.getValue() >= THRESHOLD_GROUP_THREE_THREE) {
-						for (Entry<Integer, Integer> entry3 : entrySet) {
-							if (entry3.getValue() >= THRESHOLD_GROUP_THREE_THREE) {
-								GroupStat stat = new GroupStat();
-								stat.setType((type.ordinal()));
-								stat.setNumber(entry1.getKey(), entry2.getKey(), entry3.getKey());
-								stat.setAbsences(entry1.getValue(), entry2.getValue(), entry3.getValue());
-								stats.add(stat);
-							}
-						}
-					}
-				}
+		List<int[]> combList = Utils.combination(list, count);
+		for (int[] comb : combList) {
+			GroupStat stat = new GroupStat();
+			stat.setType((type));
+			int[] ab = new int[comb.length];
+			for (int k = 0; k < ab.length; k++) {
+				ab[k] = absenceMap.get(comb[k]);
 			}
+			stat.setNumber(comb);
+			stat.setAbsences(ab);
+			stats.add(stat);
 		}
-
-		for (Entry<Integer, Integer> entry1 : entrySet) {
-			if (entry1.getValue() >= THRESHOLD_GROUP_THREE_FOUR) {
-				for (Entry<Integer, Integer> entry2 : entrySet) {
-					if (entry2.getValue() >= THRESHOLD_GROUP_THREE_FOUR) {
-						for (Entry<Integer, Integer> entry3 : entrySet) {
-							if (entry3.getValue() >= THRESHOLD_GROUP_THREE_FOUR) {
-								for (Entry<Integer, Integer> entry4 : entrySet) {
-									if (entry4.getValue() >= THRESHOLD_GROUP_THREE_FOUR) {
-										GroupStat stat = new GroupStat();
-										stat.setType((type.ordinal()));
-										stat.setNumber(entry1.getKey(), entry2.getKey(), entry3.getKey(),
-												entry4.getKey());
-										stat.setAbsences(entry1.getValue(), entry2.getValue(), entry3.getValue(),
-												entry4.getValue());
-										stats.add(stat);
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-
-		for (Entry<Integer, Integer> entry1 : entrySet) {
-			if (entry1.getValue() >= THRESHOLD_GROUP_THREE_FIVE) {
-				for (Entry<Integer, Integer> entry2 : entrySet) {
-					if (entry2.getValue() >= THRESHOLD_GROUP_THREE_FIVE) {
-						for (Entry<Integer, Integer> entry3 : entrySet) {
-							if (entry3.getValue() >= THRESHOLD_GROUP_THREE_FIVE) {
-								for (Entry<Integer, Integer> entry4 : entrySet) {
-									if (entry4.getValue() >= THRESHOLD_GROUP_THREE_FIVE) {
-										for (Entry<Integer, Integer> entry5 : entrySet) {
-											if (entry5.getValue() >= THRESHOLD_GROUP_THREE_FIVE) {
-												GroupStat stat = new GroupStat();
-												stat.setType((type.ordinal()));
-												stat.setNumber(entry1.getKey(), entry2.getKey(), entry3.getKey(),
-														entry4.getKey(), entry5.getKey());
-												stat.setAbsences(entry1.getValue(), entry2.getValue(),
-														entry3.getValue(), entry4.getValue(), entry5.getValue());
-												stats.add(stat);
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-
 		return stats;
+	}
+
+	public static void main(String[] args) {
+		Map<Integer, Integer> absencesMap = new HashMap<>();
+		for (int i = 0; i < 10; i++) {
+			for (int k = 0; k < 10; k++) {
+				if (k != i) {
+					int ab = RandomUtils.nextInt(0, THRESHOLD_GROUP_THREE_TWO + 50);
+					int n = i * 100 + i * 10 + k;
+					absencesMap.put(n, ab);
+					if (ab >= THRESHOLD_GROUP_THREE_TWO) {
+						System.out.println(n + "," + ab);
+					}
+				}
+			}
+		}
+
+		StatService service = new StatService();
+		List<GroupStat> twoStats = service.calcGroupStats(absencesMap, THRESHOLD_GROUP_THREE_TWO, 2, 5);
+		System.out.println(twoStats);
+		System.out.println(twoStats.size());
 	}
 }

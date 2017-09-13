@@ -1,5 +1,7 @@
 package com.zf.lottery.data;
 
+import java.util.Arrays;
+
 public class GroupStat {
 	public static final String KEY_GROUP_STAT = "GroupStat";
 
@@ -29,6 +31,12 @@ public class GroupStat {
 
 	public void setAbsences(int... absences) {
 		this.absences = absences;
+	}
+
+	@Override
+	public String toString() {
+		return "GroupStat [type=" + type + ", number=" + Arrays.toString(number) + ", absences="
+				+ Arrays.toString(absences) + "]";
 	}
 
 }
