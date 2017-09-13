@@ -104,7 +104,7 @@ public class StatService {
 		stats.addAll(combTwoStats);
 		List<GroupStat> groupSixStats = checkGroupSixProbability(manager.getGroupSix(), StarType.GroupSix);
 		stats.addAll(groupSixStats);
-		List<GroupStat> groupThreeStats = checkGroupThreeProbability(manager.getGroupSix(), StarType.GroupThree);
+		List<GroupStat> groupThreeStats = checkGroupThreeProbability(manager.getGroupThree(), StarType.GroupThree);
 		stats.addAll(groupThreeStats);
 		return stats;
 	}
