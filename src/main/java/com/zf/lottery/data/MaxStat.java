@@ -1,7 +1,7 @@
 package com.zf.lottery.data;
 
 public class MaxStat {
-	public static final String KEY_MAX_STAT = "MaxStat";
+	public static final String KEY_MAX_STAT = "STAT";
 
 	private int type = -1;
 	private int number = -1;

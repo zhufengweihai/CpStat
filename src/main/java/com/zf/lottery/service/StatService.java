@@ -113,14 +113,14 @@ public class StatService {
 		List<GroupStat> stats = new ArrayList<>();
 		List<GroupStat> oneStats = calcGroupStats(absences, THRESHOLD_TWO, 1, type.ordinal());
 		stats.addAll(oneStats);
-		List<GroupStat> twoStats = calcGroupStats(absences, THRESHOLD_TWO_TWO, 2, type.ordinal());
-		stats.addAll(twoStats);
-		List<GroupStat> threeStats = calcGroupStats(absences, THRESHOLD_TWO_THREE, 3, type.ordinal());
-		stats.addAll(threeStats);
-		List<GroupStat> fourStats = calcGroupStats(absences, THRESHOLD_TWO_FOUR, 4, type.ordinal());
-		stats.addAll(fourStats);
-		List<GroupStat> fiveStats = calcGroupStats(absences, THRESHOLD_TWO_FIVE, 5, type.ordinal());
-		stats.addAll(fiveStats);
+//		List<GroupStat> twoStats = calcGroupStats(absences, THRESHOLD_TWO_TWO, 2, type.ordinal());
+//		stats.addAll(twoStats);
+//		List<GroupStat> threeStats = calcGroupStats(absences, THRESHOLD_TWO_THREE, 3, type.ordinal());
+//		stats.addAll(threeStats);
+//		List<GroupStat> fourStats = calcGroupStats(absences, THRESHOLD_TWO_FOUR, 4, type.ordinal());
+//		stats.addAll(fourStats);
+//		List<GroupStat> fiveStats = calcGroupStats(absences, THRESHOLD_TWO_FIVE, 5, type.ordinal());
+//		stats.addAll(fiveStats);
 		return stats;
 	}
 
@@ -128,14 +128,14 @@ public class StatService {
 		List<GroupStat> stats = new ArrayList<>();
 		List<GroupStat> oneStats = calcGroupStats(absenceMap, THRESHOLD_COMB_TWO, 1, type.ordinal());
 		stats.addAll(oneStats);
-		List<GroupStat> twoStats = calcGroupStats(absenceMap, THRESHOLD_COMB_TWO_TWO, 2, type.ordinal());
-		stats.addAll(twoStats);
-		List<GroupStat> threeStats = calcGroupStats(absenceMap, THRESHOLD_COMB_TWO_THREE, 3, type.ordinal());
-		stats.addAll(threeStats);
-		List<GroupStat> fourStats = calcGroupStats(absenceMap, THRESHOLD_COMB_TWO_FOUR, 4, type.ordinal());
-		stats.addAll(fourStats);
-		List<GroupStat> fiveStats = calcGroupStats(absenceMap, THRESHOLD_COMB_TWO_FIVE, 5, type.ordinal());
-		stats.addAll(fiveStats);
+//		List<GroupStat> twoStats = calcGroupStats(absenceMap, THRESHOLD_COMB_TWO_TWO, 2, type.ordinal());
+//		stats.addAll(twoStats);
+//		List<GroupStat> threeStats = calcGroupStats(absenceMap, THRESHOLD_COMB_TWO_THREE, 3, type.ordinal());
+//		stats.addAll(threeStats);
+//		List<GroupStat> fourStats = calcGroupStats(absenceMap, THRESHOLD_COMB_TWO_FOUR, 4, type.ordinal());
+//		stats.addAll(fourStats);
+//		List<GroupStat> fiveStats = calcGroupStats(absenceMap, THRESHOLD_COMB_TWO_FIVE, 5, type.ordinal());
+//		stats.addAll(fiveStats);
 		return stats;
 	}
 
@@ -143,14 +143,14 @@ public class StatService {
 		List<GroupStat> stats = new ArrayList<>();
 		List<GroupStat> oneStats = calcGroupStats(absences, THRESHOLD_THREE, 1, type.ordinal());
 		stats.addAll(oneStats);
-		List<GroupStat> twoStats = calcGroupStats(absences, THRESHOLD_THREE_TWO, 2, type.ordinal());
-		stats.addAll(twoStats);
-		List<GroupStat> threeStats = calcGroupStats(absences, THRESHOLD_THREE_THREE, 3, type.ordinal());
-		stats.addAll(threeStats);
-		List<GroupStat> fourStats = calcGroupStats(absences, THRESHOLD_THREE_FOUR, 4, type.ordinal());
-		stats.addAll(fourStats);
-		List<GroupStat> fiveStats = calcGroupStats(absences, THRESHOLD_THREE_FIVE, 5, type.ordinal());
-		stats.addAll(fiveStats);
+//		List<GroupStat> twoStats = calcGroupStats(absences, THRESHOLD_THREE_TWO, 2, type.ordinal());
+//		stats.addAll(twoStats);
+//		List<GroupStat> threeStats = calcGroupStats(absences, THRESHOLD_THREE_THREE, 3, type.ordinal());
+//		stats.addAll(threeStats);
+//		List<GroupStat> fourStats = calcGroupStats(absences, THRESHOLD_THREE_FOUR, 4, type.ordinal());
+//		stats.addAll(fourStats);
+//		List<GroupStat> fiveStats = calcGroupStats(absences, THRESHOLD_THREE_FIVE, 5, type.ordinal());
+//		stats.addAll(fiveStats);
 		return stats;
 	}
 
@@ -158,14 +158,14 @@ public class StatService {
 		List<GroupStat> stats = new ArrayList<>();
 		List<GroupStat> oneStats = calcGroupStats(absenceMap, THRESHOLD_GROUP_SIX, 1, type.ordinal());
 		stats.addAll(oneStats);
-		List<GroupStat> twoStats = calcGroupStats(absenceMap, THRESHOLD_GROUP_SIX_TWO, 2, type.ordinal());
-		stats.addAll(twoStats);
-		List<GroupStat> threeStats = calcGroupStats(absenceMap, THRESHOLD_GROUP_SIX_THREE, 3, type.ordinal());
-		stats.addAll(threeStats);
-		List<GroupStat> fourStats = calcGroupStats(absenceMap, THRESHOLD_GROUP_SIX_FOUR, 4, type.ordinal());
-		stats.addAll(fourStats);
-		List<GroupStat> fiveStats = calcGroupStats(absenceMap, THRESHOLD_GROUP_SIX_FIVE, 5, type.ordinal());
-		stats.addAll(fiveStats);
+//		List<GroupStat> twoStats = calcGroupStats(absenceMap, THRESHOLD_GROUP_SIX_TWO, 2, type.ordinal());
+//		stats.addAll(twoStats);
+//		List<GroupStat> threeStats = calcGroupStats(absenceMap, THRESHOLD_GROUP_SIX_THREE, 3, type.ordinal());
+//		stats.addAll(threeStats);
+//		List<GroupStat> fourStats = calcGroupStats(absenceMap, THRESHOLD_GROUP_SIX_FOUR, 4, type.ordinal());
+//		stats.addAll(fourStats);
+//		List<GroupStat> fiveStats = calcGroupStats(absenceMap, THRESHOLD_GROUP_SIX_FIVE, 5, type.ordinal());
+//		stats.addAll(fiveStats);
 		return stats;
 	}
 
@@ -173,14 +173,18 @@ public class StatService {
 		List<GroupStat> stats = new ArrayList<>();
 		List<GroupStat> oneStats = calcGroupStats(absenceMap, THRESHOLD_GROUP_THREE, 1, type.ordinal());
 		stats.addAll(oneStats);
-		List<GroupStat> twoStats = calcGroupStats(absenceMap, THRESHOLD_GROUP_THREE_TWO, 2, type.ordinal());
-		stats.addAll(twoStats);
-		List<GroupStat> threeStats = calcGroupStats(absenceMap, THRESHOLD_GROUP_THREE_THREE, 3, type.ordinal());
-		stats.addAll(threeStats);
-		List<GroupStat> fourStats = calcGroupStats(absenceMap, THRESHOLD_GROUP_THREE_FOUR, 4, type.ordinal());
-		stats.addAll(fourStats);
-		List<GroupStat> fiveStats = calcGroupStats(absenceMap, THRESHOLD_GROUP_THREE_FIVE, 5, type.ordinal());
-		stats.addAll(fiveStats);
+		// List<GroupStat> twoStats = calcGroupStats(absenceMap,
+		// THRESHOLD_GROUP_THREE_TWO, 2, type.ordinal());
+		// stats.addAll(twoStats);
+		// List<GroupStat> threeStats = calcGroupStats(absenceMap,
+		// THRESHOLD_GROUP_THREE_THREE, 3, type.ordinal());
+		// stats.addAll(threeStats);
+		// List<GroupStat> fourStats = calcGroupStats(absenceMap,
+		// THRESHOLD_GROUP_THREE_FOUR, 4, type.ordinal());
+		// stats.addAll(fourStats);
+		// List<GroupStat> fiveStats = calcGroupStats(absenceMap,
+		// THRESHOLD_GROUP_THREE_FIVE, 5, type.ordinal());
+		// stats.addAll(fiveStats);
 		return stats;
 	}
 
