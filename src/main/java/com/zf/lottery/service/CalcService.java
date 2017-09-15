@@ -13,7 +13,28 @@ import com.zf.lottery.common.Utils;
 import com.zf.lottery.data.Lottery;
 
 public class CalcService {
+	public int[] calcMaxLastOne(List<Lottery> lotteries) {
+		ArrayList<Integer>[] absences = new ArrayList[Commons.ONE];
+		for (int i = 0; i < Commons.ONE; i++) {
+			absences[i] = new ArrayList<Integer>();
+		}
+		int[] lasts = new int[Commons.ONE];
+		int size = lotteries.size();
+		for (int i = 0; i < size; i++) {
+			Lottery lottery = lotteries.get(i);
+			int num = lottery.getNumber() % Commons.ONE;
+			absences[num].add(i - lasts[num]);
+			lasts[num] = i;
+		}
 
+		int[] maxLastOne = new int[Commons.ONE];
+		for (int i = 0; i < absences.length; i++) {
+			maxLastOne[i] = Collections.max(absences[i]);
+		}
+
+		return maxLastOne;
+	}
+	
 	public Map<Integer, Integer> calcMaxCombTwo(List<Lottery> lotteries) {
 		Map<Integer, ArrayList<Integer>> absencesMap = new HashMap<>();
 		for (int i = 0; i < 10; i++) {
@@ -76,9 +97,12 @@ public class CalcService {
 		int size = lotteries.size();
 		for (int i = 0; i < size; i++) {
 			Lottery lottery = lotteries.get(i);
-			int num = lottery.getNumber() / Commons.THREE;
-			absences[num].add(i - lasts[num]);
-			lasts[num] = i;
+			int num1 = lottery.getNumber() / Commons.THREE;
+			absences[num1].add(i - lasts[num1]);
+			lasts[num1] = i;
+			int num2 = lottery.getNumber() % Commons.TWO;
+			absences[num2].add(i - lasts[num2]);
+			lasts[num2] = i;
 		}
 
 		int[] maxFirstTwo = new int[Commons.TWO];
@@ -88,6 +112,26 @@ public class CalcService {
 		return maxFirstTwo;
 	}
 
+	public int[] calcLatestLastOne(List<Lottery> lotteries) {
+		int[] lastOne = new int[Commons.ONE];
+		for (int i = 0; i < lastOne.length; i++) {
+			lastOne[i] = -1;
+		}
+		int size = lotteries.size() - 1;
+		int count = 0;
+		for (int i = size; i >= 0; i--) {
+			Lottery lottery = lotteries.get(i);
+			int lt = lottery.getNumber() % Commons.ONE;
+			if (lastOne[lt] < 0) {
+				lastOne[lt] = size - i;
+				if (++count == Commons.ONE) {
+					return lastOne;
+				}
+			}
+		}
+		return lastOne;
+	}
+	
 	public int[] calcLatestFirstThree(List<Lottery> lotteries) {
 		int[] firstThree = new int[Commons.THREE];
 		for (int i = 0; i < firstThree.length; i++) {
@@ -97,9 +141,16 @@ public class CalcService {
 		int count = 0;
 		for (int i = size; i >= 0; i--) {
 			Lottery lottery = lotteries.get(i);
-			int ft = lottery.getNumber() / Commons.TWO;
-			if (firstThree[ft] < 0) {
-				firstThree[ft] = size - i;
+			int ft1 = lottery.getNumber() / Commons.TWO;
+			if (firstThree[ft1] < 0) {
+				firstThree[ft1] = size - i;
+				if (++count == Commons.THREE) {
+					return firstThree;
+				}
+			}
+			int ft2 = lottery.getNumber() % Commons.THREE;
+			if (firstThree[ft2] < 0) {
+				firstThree[ft2] = size - i;
 				if (++count == Commons.THREE) {
 					return firstThree;
 				}
@@ -137,9 +188,16 @@ public class CalcService {
 		int count = 0;
 		for (int i = size; i >= 0; i--) {
 			Lottery lottery = lotteries.get(i);
-			int ft = lottery.getNumber() / Commons.THREE;
-			if (firstTwo[ft] < 0) {
-				firstTwo[ft] = size - i;
+			int ft1 = lottery.getNumber() / Commons.THREE;
+			if (firstTwo[ft1] < 0) {
+				firstTwo[ft1] = size - i;
+				if (++count == Commons.TWO) {
+					return firstTwo;
+				}
+			}
+			int ft2 = lottery.getNumber() % Commons.TWO;
+			if (firstTwo[ft2] < 0) {
+				firstTwo[ft2] = size - i;
 				if (++count == Commons.TWO) {
 					return firstTwo;
 				}

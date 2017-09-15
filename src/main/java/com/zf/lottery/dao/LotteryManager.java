@@ -13,9 +13,11 @@ public class LotteryManager {
 	private int realCount = -1;
 	private int maxTerm = -1;
 
+	private int[] maxLastOne = null;
 	private int[] maxFirstTwo = null;
 	private int[] maxLastTwo = null;
 	private Map<Integer, Integer> maxCombTwo = null;
+	private int[] lastOne = null;
 	private int[] firstThree = null;
 	private int[] lastThree = null;
 	private int[] firstTwo = null;
@@ -60,6 +62,14 @@ public class LotteryManager {
 		count++;
 	}
 
+	public int[] getMaxLastOne() {
+		return maxLastOne;
+	}
+
+	public void setMaxLastOne(int[] maxLastOne) {
+		this.maxLastOne = maxLastOne;
+	}
+
 	public int[] getMaxFirstTwo() {
 		return maxFirstTwo;
 	}
@@ -97,6 +107,7 @@ public class LotteryManager {
 			firstThree[i]++;
 		}
 		firstThree[number / Commons.TWO] = 0;
+		firstThree[number % Commons.THREE] = 0;
 	}
 
 	public int[] getLastThree() {
@@ -127,6 +138,7 @@ public class LotteryManager {
 			firstTwo[i]++;
 		}
 		firstTwo[number / Commons.THREE] = 0;
+		firstTwo[number % Commons.TWO] = 0;
 
 		for (int i = 0; i < firstTwo.length; i++) {
 			if (firstTwo[i] >= maxFirstTwo[i]) {
@@ -156,6 +168,26 @@ public class LotteryManager {
 		}
 	}
 
+	public int[] getLastOne() {
+		return lastOne;
+	}
+
+	public void setLastOne(int[] lastone) {
+		this.lastOne = lastone;
+	}
+
+	public void updateLastOne(int number) {
+		for (int i = 0; i < lastOne.length; i++) {
+			lastOne[i]++;
+		}
+		lastOne[number % Commons.ONE] = 0;
+		for (int i = 0; i < lastOne.length; i++) {
+			if (lastOne[i] >= maxLastOne[i]) {
+				maxLastOne[i] = lastOne[i];
+			}
+		}
+	}
+	
 	public Map<Integer, Integer> getGroupSix() {
 		return groupSix;
 	}

@@ -32,11 +32,13 @@ public class UpdateService {
 			CalcService calcService = new CalcService();
 			// manager.setMaxFirstThree(calcService.calcMaxFirstThree(lotteries));
 			// manager.setMaxLastThree(calcService.calcMaxLastThree(lotteries));
+			manager.setMaxLastOne(calcService.calcMaxLastOne(lotteries));
 			manager.setMaxFirstTwo(calcService.calcMaxFirstTwo(lotteries));
 			manager.setMaxLastTwo(calcService.calcMaxLastTwo(lotteries));
 			// manager.setMaxCombThree(calcService.calcMaxCombThree(lotteries));
 			manager.setMaxCombTwo(calcService.calcMaxCombTwo(lotteries));
 
+			manager.setLastOne(calcService.calcLatestLastOne(lotteries));
 			manager.setFirstThree(calcService.calcLatestFirstThree(lotteries));
 			manager.setLastThree(calcService.calcLatestLastThree(lotteries));
 			manager.setFirstTwo(calcService.calcLatestFirstTwo(lotteries));
@@ -60,6 +62,7 @@ public class UpdateService {
 				manager.increaseCount();
 				manager.setMaxTerm(lottery.getTerm());
 				int number = lottery.getNumber();
+				manager.updateLastOne(number);
 				manager.updateFirstThree(number);
 				manager.updateLastThree(number);
 				manager.updateFirstTwo(number);
