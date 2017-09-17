@@ -58,6 +58,10 @@ public class UpdateService {
 	public void update() {
 		try {
 			List<Lottery> latestData = requestData();
+			if (manager.getRealCount() != manager.getCount() + latestData.size()) {
+				PushService.pushError();
+				return;
+			}
 			for (Lottery lottery : latestData) {
 				manager.increaseCount();
 				manager.setMaxTerm(lottery.getTerm());
@@ -70,11 +74,6 @@ public class UpdateService {
 				manager.updateGroupSix(number);
 				manager.updateGroupThree(number);
 				manager.updateCombTwo(number);
-			}
-
-			if (manager.getRealCount() != manager.getCount()) {
-				PushService.pushError();
-				throw new Exception();
 			}
 
 			statService.statAndPush();
