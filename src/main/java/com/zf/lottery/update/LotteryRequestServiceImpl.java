@@ -20,6 +20,10 @@ import com.zf.lottery.dao.LotteryManager;
 import com.zf.lottery.data.Lottery;
 
 public class LotteryRequestServiceImpl implements LotteryRequestService {
+	private static final String COUNT_END = "条记录";
+	private static final String COUNT_START = "<div class=\"page\" id=\"pages\">";
+	private static final String RESULT_END = "</tr>";
+	private static final String RESULT_START = "<td><span class=\"c_333\">";
 	private static final int BASE_TIME = 10000;
 	private static final String URL = "http://www.caipiaow.com/index.php?m=kaijiang&a=index&cz=cq&type=ssc&p=1";
 	private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -34,16 +38,20 @@ public class LotteryRequestServiceImpl implements LotteryRequestService {
 		try {
 			response = httpClient.execute(httpget);
 			String strResult = EntityUtils.toString(response.getEntity());
-			String string = "<td><span class=\"c_333\">";
-			String[] resultHtmls = StringUtils.substringsBetween(strResult, string, "</tr>");
+			if (StringUtils.isEmpty(strResult)) {
+				return lotteries;
+			}
+			String[] resultHtmls = StringUtils.substringsBetween(strResult, RESULT_START, RESULT_END);
 			if (resultHtmls != null) {
 				for (String resultHtml : resultHtmls) {
 					lotteries.add(createLottery(resultHtml));
 				}
+				String countString = StringUtils.substringBetween(strResult, COUNT_START, COUNT_END);
+				if (!StringUtils.isEmpty(countString)) {
+					String cs = countString.trim();
+					LotteryManager.instance().setRealCount(Integer.parseInt(cs) - 1);
+				}
 			}
-
-			String cs = StringUtils.substringBetween(strResult, "<div class=\"page\" id=\"pages\">", "条记录").trim();
-			LotteryManager.instance().setRealCount(Integer.parseInt(cs) - 1);
 		} finally {
 			if (response != null) {
 				response.close();
