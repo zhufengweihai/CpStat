@@ -23,12 +23,17 @@ public class PushService {
 	private final static String masterSecret = "99b9d5b3de7c8adb64367cef";
 	private static Logger logger = LoggerFactory.getLogger(PushService.class);
 	private static JPushClient jPushClient = new JPushClient(masterSecret, appKey);
+	private static boolean lastIsEmpty = true;
 
 	public static void push(List<MaxStat> maxStats, List<GroupStat> groupStats) {
-		if ((maxStats == null || maxStats.size() == 0) && (groupStats == null || groupStats.size() == 0)) {
+		String content = "";
+		if (maxStats.size() > 0 || groupStats.size() > 0) {
+			content = toString(maxStats, groupStats);
+			lastIsEmpty = false;
+		} else if (lastIsEmpty) {
+			lastIsEmpty = true;
 			return;
 		}
-		String content = toString(maxStats, groupStats);
 		PushPayload pushPayload = buildPushObject(content);
 		try {
 			jPushClient.sendPush(pushPayload);
