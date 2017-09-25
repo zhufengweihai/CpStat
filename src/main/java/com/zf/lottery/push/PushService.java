@@ -31,9 +31,11 @@ public class PushService {
 			content = toString(maxStats, groupStats);
 			lastIsEmpty = false;
 		} else if (lastIsEmpty) {
-			lastIsEmpty = true;
 			return;
+		} else {
+			lastIsEmpty = true;
 		}
+		
 		PushPayload pushPayload = buildPushObject(content);
 		try {
 			jPushClient.sendPush(pushPayload);
